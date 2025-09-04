@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공 게임</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #f0f0f0;
+      font-family: sans-serif;
+    }
+
+    #ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: crimson;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .flame {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, orange, red, transparent);
+      border-radius: 50%;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+      animation: flicker 0.4s ease-out forwards;
+    }
+
+    .green-ball {
+      position: absolute;
+      background-color: green;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      100% { transform: scale(2) translateY(20px); opacity: 0; }
+    }
+
+    #hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(100, 100, 100, 0.3);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="ball"></div>
+  <div id="hud">레벨: 1<br>경험치: 0</div>
+
+  <script>
+    const ball = document.getElementById("ball");
+    const hud = document.getElementById("hud");
+
+    const ballSize = 50;
+    const greenBalls = [];
+    const greenBallCount = 10;
+    const greenSize = ballSize / 2;
+
+    let x = 100, y = 100;
+    let vx = 0, vy = 0;
+    const baseAcceleration = 0.5;
+    const baseMaxSpeed = 10;
+    let acceleration = baseAcceleration;
+    let maxSpeed = baseMaxSpeed;
+    const friction = 0.95;
+    let boostMode = false;
+    let lastFlameTime = 0;
+    const flameInterval = 50;
+
+    const keys = {
+      ArrowUp: false, ArrowDown: false,
+      ArrowLeft: false, ArrowRight: false
+    };
+
+    // 레벨/경험치 상태
+    let level = 1;
+    let exp = 0;
+
+    // 키 입력 처리
+    document.addEventListener("keydown", (e) => {
+      if (e.key in keys) keys[e.key] = true;
+
+      if (e.code === "Space" && !e.repeat) {
+        boostMode = !boostMode;
+        acceleration = boostMode ? baseAcceleration * 2 : baseAcceleration;
+        maxSpeed = boostMode ? baseMaxSpeed * 2 : baseMaxSpeed;
+        ball.style.backgroundColor = boostMode ? "orange" : "crimson";
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key in keys) keys[e.key] = false;
+    });
+
+    function createFlame(x, y) {
+      const flame = document.createElement("div");
+      flame.className = "flame";
+      flame.style.left = x + "px";
+      flame.style.top = y + "px";
+      document.body.appendChild(flame);
+      setTimeout(() => flame.remove(), 400);
+    }
+
+    function spawnGreenBall() {
+      const div = document.createElement("div");
+      div.className = "green-ball";
+      div.style.width = greenSize + "px";
+      div.style.height = greenSize + "px";
+      document.body.appendChild(div);
+
+      return {
+        el: div,
+        x: Math.random() * (window.innerWidth - greenSize),
+        y: Math.random() * (window.innerHeight - greenSize),
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 4
+      };
+    }
+
+    function respawnGreenBall(gb) {
+      gb.x = Math.random() * (window.innerWidth - greenSize);
+      gb.y = Math.random() * (window.innerHeight - greenSize);
+      gb.vx = (Math.random() - 0.5) * 4;
+      gb.vy = (Math.random() - 0.5) * 4;
+    }
+
+    function checkCollision(ax, ay, asize, bx, by, bsize) {
+      const dx = ax + asize / 2 - (bx + bsize / 2);
+      const dy = ay + asize / 2 - (by + bsize / 2);
+      return Math.hypot(dx, dy) < (asize + bsize) / 2;
+    }
+
+    function updateHUD() {
+      hud.innerHTML = `레벨: ${level}<br>경험치: ${exp}`;
+    }
+
+    // 초기 초록공 생성
+    for (let i = 0; i < greenBallCount; i++) {
+      greenBalls.push(spawnGreenBall());
+    }
+
+    function update(timestamp) {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      // 빨간 공 이동 처리
+      if (keys.ArrowUp) vy -= acceleration;
+      if (keys.ArrowDown) vy += acceleration;
+      if (keys.ArrowLeft) vx -= acceleration;
+      if (keys.ArrowRight) vx += acceleration;
+
+      vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
+      vy = Math.max(-maxSpeed, Math.min(maxSpeed, vy));
+
+      x += vx;
+      y += vy;
+
+      // 포털 이동
+      if (x + ballSize < 0) x = screenWidth;
+      else if (x > screenWidth) x = -ballSize;
+      if (y + ballSize < 0) y = screenHeight;
+      else if (y > screenHeight) y = -ballSize;
+
+      vx *= friction;
+      vy *= friction;
+
+      ball.style.left = x + "px";
+      ball.style.top = y + "px";
+
+      // 불꽃 효과
+      if (boostMode && timestamp - lastFlameTime > flameInterval) {
+        lastFlameTime = timestamp;
+        createFlame(x + ballSize / 2 - 10, y + ballSize / 2);
+      }
+
+      // 초록 공 업데이트
+      for (const gb of greenBalls) {
+        gb.x += gb.vx;
+        gb.y += gb.vy;
+
+        if (gb.x + greenSize < 0) gb.x = screenWidth;
+        else if (gb.x > screenWidth) gb.x = -greenSize;
+        if (gb.y + greenSize < 0) gb.y = screenHeight;
+        else if (gb.y > screenHeight) gb.y = -greenSize;
+
+        gb.el.style.left = gb.x + "px";
+        gb.el.style.top = gb.y + "px";
+
+        if (checkCollision(x, y, ballSize, gb.x, gb.y, greenSize)) {
+          respawnGreenBall(gb);
+          exp += 1;
+          if (exp >= level * 10) {
+            level += 1;
+            exp = 0;
+          }
+          updateHUD();
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    updateHUD(); // 초기 HUD 표시
+    requestAnimationFrame(update);
+  </script>
+</body>
+</html>

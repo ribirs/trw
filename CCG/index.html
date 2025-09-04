@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Card Collection Game</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="background"></div>
+  <div class="menu-button" id="QuestBtn">📜</div>
+  <div class="menu-button" id="inventoryBtn">🃏</div>
+  <div class="menu-button" id="shopBtn">🏪</div>
+  <div class="menu-button" id="UpgradeBtn">💡</div>
+  <div class="menu-button" id="OptionBtn">⚙️</div>
+  <div class="menu-button" id="GuideBtn">🔍</div>
+  <div class="menu-button" id="EnemyUp" onclick="Respawn(1)">⬆️</div>
+  <div class="menu-button" id="EnemyDw" onclick="Respawn(2)">⬇️</div>
+  <div class="menu-button" id="healBtn" onclick="AllHeal(1)">💉</div>
+  <div class="menu-button" id="UpdateBtn" onclick="showVersionMismatchPopup(-1, 1);">📜</div>
+  <!-- 슬라이드 인벤토리 창 -->
+  <div class="inventory-panel" id="inventoryPanel">
+    <div class="inventory-header">
+      <h3>내 카드 
+        <span style="cursor:pointer;" onclick="Size(1)">➕</span>
+        <span style="cursor:pointer;" onclick="Size(2)">➖</span>
+      </h3>
+    </div>
+    <div id="inventoryList"></div>
+  </div>
+  <!-- 상점 슬라이드 -->
+  <div class="shop-panel" id="shopPanel">
+    <div class="shop-header">
+      <h3>상점</h3>
+    </div>
+    <div id="shopButtons">
+      <h4>카드 구매</h4>
+       <!-- 0~6 -->
+        <button id="ShopBtn11" onclick="BuyCard(1)">N~R급 카드 랜덤 구매<br>1k💰</button>
+       <button id="ShopBtn12" onclick="BuyCard(11)">N~R급 카드 (10+1)<br>10k💰</button>
+       <button id="ShopBtn13" onclick="BuyCard(21)">N~R급 카드 (20)<br>100💎</button>
+      <!-- 5~11 -->
+        <button id="ShopBtn21" class= "hidden" onclick="BuyCard(2)">R~SR급 카드 랜덤 구매<br>10k💰</button>
+       <button id="ShopBtn22" class= "hidden" onclick="BuyCard(12)">R~SR급 카드 (10+1)<br>100k💰</button>
+       <button id="ShopBtn23" class= "hidden" onclick="BuyCard(22)">R~SR급 카드 (20)<br>200💎</button>
+      <!-- 10~16 -->
+        <button id="ShopBtn31" class= "hidden" onclick="BuyCard(3)">SR~SSR급 카드 랜덤 구매<br>100k💰</button>
+       <button id="ShopBtn32" class= "hidden" onclick="BuyCard(13)">SR~SSR급 카드 (10+1)<br>1M💰</button>
+       <button id="ShopBtn33" class= "hidden" onclick="BuyCard(23)">SR~SSR급 카드 (20)<br>300💎</button>
+      <!-- 15~21 -->
+        <button id="ShopBtn41" class= "hidden" onclick="BuyCard(4)">SSR~UR급 카드 랜덤 구매<br>1M💰</button>
+       <button id="ShopBtn42" class= "hidden" onclick="BuyCard(14)">SSR~UR급 카드 (10+1)<br>10M💰</button>
+       <button id="ShopBtn43" class= "hidden" onclick="BuyCard(24)">SSR~UR급 카드 (20)<br>400💎</button>
+      <!-- 20~26 -->
+        <button id="ShopBtn51" class= "hidden" onclick="BuyCard(5)">UR~LR급 카드 랜덤 구매<br>10M💰</button>
+       <button id="ShopBtn52" class= "hidden" onclick="BuyCard(15)">UR~LR급 카드 (10+1)<br>100M💰</button>
+       <button id="ShopBtn53" class= "hidden" onclick="BuyCard(25)">UR~LR급 카드 (20)<br>600💎</button>
+      <!-- 25~31 -->
+       <button id="ShopBtn61" class= "hidden" onclick="BuyCard(6)">LR급 카드 랜덤 구매<br>100M💰</button>
+      <button id="ShopBtn62" class= "hidden" onclick="BuyCard(16)">LR급 카드 (10+1)<br>1G💰</button>
+      <button id="ShopBtn63" class= "hidden" onclick="BuyCard(26)">LR급 카드 (20)<br>1000💎</button>
+      <!-- 30~36 -->
+       <button id="ShopBtn71" class= "hidden" onclick="BuyCard(7)">GR급 카드 랜덤 구매<br>1G💰</button>
+      <button id="ShopBtn72" class= "hidden" onclick="BuyCard(17)">GR급 카드 (10+1)<br>10G💰</button>
+      <button id="ShopBtn73" class= "hidden" onclick="BuyCard(27)">GR급 카드 (20)<br>3000💎</button>
+      <hr>
+      <h4>강화석 보유</h4>
+      <div id="StoneList">⬜</div>
+      <hr>
+      <h4>강화석 조합</h4>
+      <button id="StoneBtn0" onclick="StoneUp(0)">N x 3 > R급<br>강화석 조합</button>
+      <button id="StoneBtn1" onclick="StoneUp(1)">R x 3 > SR급<br>강화석 조합</button>
+      <button id="StoneBtn2" onclick="StoneUp(2)">SR x 3 > SSR급<br>강화석 조합</button>
+      <button id="StoneBtn3" onclick="StoneUp(3)">SSR x 3 > UR급<br>강화석 조합</button>
+      <button id="StoneBtn4" onclick="StoneUp(4)">UR x 3 > LR급<br>강화석 조합</button>
+      <button id="StoneBtn5" onclick="StoneUp(5)">LR x 3 > GR급<br>강화석 조합</button>
+      <button id="StoneBtn6" onclick="StoneUp(6)">GR x 3 > TR급<br>강화석 조합</button>
+      <hr>
+      <h4>강화석 판매</h4>
+      <button id="SellBtn0" onclick="SellStone(0,200)">N급 강화석 판매<br>200💰</button>
+      <button id="SellBtn1" onclick="SellStone(1,600)">R급 강화석 판매<br>600💰</button>
+      <button id="SellBtn2" onclick="SellStone(2,2000)">SR급 강화석 판매<br>2k💰</button>
+      <button id="SellBtn3" onclick="SellStone(3,6000)">SSR급 강화석 판매<br>6k💰</button>
+      <button id="SellBtn4" onclick="SellStone(4,20000)">UR급 강화석 판매<br>20k💰</button>
+      <button id="SellBtn5" onclick="SellStone(5,60000)">LR급 강화석 판매<br>60k💰</button>
+      <button id="SellBtn6" onclick="SellStone(6,200000)">GR급 강화석 판매<br>200k💰</button>
+      <button id="SellBtn7" onclick="SellStone(7,600000)">TR급 강화석 판매<br>600K💰</button>
+    </div>
+  </div>
+  <div class="Up-panel" id="UpPanel">
+    <div class="Up-header">
+      <h3>업그레이드</h3>
+    </div>
+    <div id="UpButtons">
+      <!-- 버튼이 여기에 자동 생성됩니다 -->
+    </div>
+    <hr>
+    <h2 style="text-align: center; color:cyan;">프레스티지<br>업그레이드</h2>
+    <div id="UpButtons2">
+      <!-- 버튼이 여기에 자동 생성됩니다 -->
+    </div>
+  </div>
+
+  <!-- 쿼스트 슬라이드 -->
+  <div class="Quest-panel" id="QuestPanel">
+    <div class="Quest-header">
+      <h3>퀘스트</h3>
+    </div>
+    <div id="QuestButtons">
+      <button id="QuestBtn1" class="hidden" onclick="Quests()">튜토리얼 1<br>카드 합성</button>
+      <button id="QuestBtn2" class="hidden" onclick="Quests()">튜토리얼 2<br>카드 교체</button>
+      <button id="QuestBtn3" class="hidden" onclick="Quests()">튜토리얼 3<br>카드 판매</button>
+      <button id="QuestBtn4" class="hidden" onclick="Quests()">튜토리얼 4<br>카드 레벨업</button>
+      <button id="QuestBtn5" class="hidden" onclick="Quests()">튜토리얼 5<br>카드 분해</button>
+      <button id="QuestBtn6" class="hidden" onclick="Quests()">튜토리얼 6<br>카드 강화</button>
+      <button id="QuestBtn7" class="hidden" onclick="Quests()">튜토리얼 7<br>적과의 전투</button>
+      <button id="QuestBtn8" class="hidden" onclick="Quests()">튜토리얼 8<br>회복</button>
+      <button id="QuestBtn9" class="hidden" onclick="Quests()">튜토리얼 9<br>카드 구매</button>
+      <button id="QuestBtn10" class="hidden" onclick="Quests()">튜토리얼 10<br>업그레이드</button>
+      <button id="QuestBtn11" class="hidden" onclick="Quests()">메인 퀘스트 1<br>N급 카드 정복</button>
+      <button id="QuestBtn12" class="hidden" onclick="Quests()">메인 퀘스트 2<br>R급 카드 정복</button>
+      <button id="QuestBtn13" class="hidden" onclick="Quests()">메인 퀘스트 3<br>SR급 카드 정복</button>
+      <button id="QuestBtn14" class="hidden" onclick="Quests()">메인 퀘스트 4<br>SSR급 카드 정복</button>
+      <button id="QuestBtn15" class="hidden" onclick="Quests()">메인 퀘스트 5<br>UR급 카드 정복</button>
+      <button id="QuestBtn16" class="hidden" onclick="Quests()">메인 퀘스트 6<br>LR급 카드 정복</button>
+      <button id="QuestBtn17" class="hidden" onclick="Quests()">메인 퀘스트 7<br>GR급 카드 정복</button>
+      <button id="QuestBtn18" class="hidden" onclick="Quests()">메인 퀘스트 8<br>TR급 카드 정복</button>
+    </div>
+    <hr>
+      <br>
+      <h3>카드 킬수</h3>
+    <div id="KillList"></div>
+    <hr>
+      <br>
+      <h3>카드 만렙 달성</h3>
+    <div id="MaxList"></div>
+    <hr>
+    <button class="PrestigeBtn" onclick="BuyPlatium()" id = "BuyPlatium">🧿플래티넘 코인 구매<br>1M💰</button>
+    <button class="PrestigeBtn hidden" onclick="Prestige(0)" id = "PrestigeBtn">♻️프레스티지</button>
+    <hr>
+    <button class="ResetBtn" onclick="ResetGame(0)">🗑️초기화</button>
+  </div>
+  
+  <!-- 옵션 슬라이드 -->
+  <div class="Option-panel" id="OptionPanel">
+    <div class="Option-header">
+      <h3>옵션</h3>
+    </div>
+    <div id="OptionButtons">
+      <button id="Opt0" class="Active" onclick="Opt(0,'하위카드 구매버튼 표기')">하위카드 구매버튼 표기</button>
+      <button id="Opt1" onclick="Opt(1,'카드교체시 상세 표기')">카드교체시 상세 표기</button>
+      <button id="Opt8" class="Active" onclick="Opt(8,'카드 교체시 경고 문구 표기')">카드 교체시 경고 문구 표기</button>
+      <button id="Opt9" class="Active" onclick="Opt(9,'자동전투 버튼 표기(구매시)')">자동전투 버튼 표기(구매시)</button>
+      <button id="Opt11" class="Active" onclick="Opt(11,'전투 버튼 우측 배치')">전투 버튼 우측 배치</button>
+      <!-- <button id="Opt5" class="Active" onclick="Opt(5,'수동공격 애니메이션 표기')">수동공격 애니메이션 표기</button> -->
+      <hr>
+      <h4>로그 관련 옵션</h4>
+      <button onclick="toggleLogOptions()">🟢 로그 옵션 전체 ON/OFF</button>
+      <button id="Opt2" class="Active" onclick="Opt(2,'적 등장 메시지 표기')">적 등장 메시지 표기</button>
+      <button id="Opt3" class="Active" onclick="Opt(3,'적 공격 메시지 표기')">적 공격 메시지 표기</button>
+      <button id="Opt4" class="Active" onclick="Opt(4,'내 공격 메시지 표기')">내 공격 메시지 표기</button>
+      <button id="Opt6" class="Active" onclick="Opt(6,'💰획득 팝업메시지 표기')">💰획득 팝업메시지 표기</button>
+      <button id="Opt7" class="Active" onclick="Opt(7,'💰획득 메시지 표기')">💰획득 메시지 표기</button>
+      <button id="Opt16" class="Active" onclick="Opt(16,'강화석 획득 메시지 표기')">강화석 획득 메시지 표기</button>
+      <button id="Opt10" class="Active" onclick="Opt(10,'체력회복 메시지 표기')">체력회복 메시지 표기</button>
+      <button id="Opt12" class="Active" onclick="Opt(12,'가드효과 메시지 표기')">가드효과 메시지 표기</button>
+      <button id="Opt13" class="Active" onclick="Opt(13,'자동전투 메시지 표기')">자동전투 메시지 표기</button>
+      <button id="Opt14" class="Active" onclick="Opt(14,'적 처치 메시지 표기')">적 처치 메시지 표기</button>
+      <button id="Opt15" class="Active" onclick="Opt(15,'저장 메시지 표기')">저장 메시지 표기</button>
+
+    </div>
+  </div>
+  
+  <!-- 가이드 슬라이드 -->
+  <div class="Guide-panel" id="GuidePanel">
+    <div class="Guide-header">
+      <h3>가이드</h3>
+    </div>
+    <div class="Guide-content">
+
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 최대 레벨 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="maxLvGuide"></div>
+      </div>
+      
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 드롭 확률 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="dropGuide"></div>
+      </div>
+      
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 합성시 필요 갯수 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="cntGuide"></div>
+      </div>
+      
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 합성 비용 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="costGuide"></div>
+      </div>
+
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 판매 가격 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="sellCostGuide"></div>
+      </div>
+
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 드롭 💰 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="rewardGoldGuide"></div>
+      </div>
+
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 레벨업 능력치 상승량 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="levelUpGuide"></div>
+      </div>
+      
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 별 만렙 보너스 효과 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="maxBonusGuide"></div>
+      </div>
+
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          카드 이미지 구경하기 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="imageShow"></div>
+      </div>
+      
+      <div class="guide-item">
+        <h4 class="guide-title" onclick="toggleGuideContent(this)">
+          티어별 카드 획득 확률표 <span class="toggle-icon">🔽</span>
+        </h4>
+        <div class="guide-description" id="cardProbGuide"></div>
+      </div>
+
+      
+      
+    </div>
+  </div>
+  
+  <div id="game-container">
+    <!-- 적 카드 영역 -->
+    <div class="card-row enemy" id="enemy-cards">
+      <!-- 카드가 JS로 삽입될 예정 -->
+    </div>
+    <!-- 내 카드 영역 -->
+    <div class="card-row player" id="player-cards">
+      <!-- 카드가 JS로 삽입될 예정 -->
+    </div>
+  </div>
+  <div id="popupMsg">
+</div>
+<!-- 카드 획득 팝업 -->
+<div id="cardPopup" class="popup hidden">
+  <div class="popup-content">
+    <button id="closePopup">✖</button>
+    <div id="cardContainer"></div>
+  </div>
+</div>
+
+  <!-- 화면 아래 로그창 -->
+  <div id="healPer"></div>
+  <div id="log-container"></div>
+  <span id="AutoBuy" onclick="AutoBuy()">일괄</span>
+  <span id="Roll" class="one" onclick="CRoll()">⟳교체</span>
+  <div id="top-bar">
+    <div id="gold-display">0💰</div>
+    <div id="Dia-display">0💎</div>
+    <div id="pp-display">0🏅</div>
+  </div>
+  <button id="AtkBtn" onclick="Attack(0)">전투</button>
+  <button id="AutoBtn" onclick="AutoAttack()">Auto</button>
+
+  <!-- 카드 교체 확인 팝업 -->
+<div id="card-confirm-overlay" class="card-confirm-overlay">
+  <div class="card-confirm-box">
+    <p id="card-confirm-text" class="card-confirm-text"></p>
+    <div class="card-confirm-buttons">
+      <button onclick="confirmCardChange(true)">확인</button>
+      <button onclick="confirmCardChange(false)">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 프레스티지 확인 팝업 -->
+<div id="Prestige-confirm-overlay" class="Prestige-confirm-overlay">
+  <div class="Prestige-confirm-box">
+    <p id="Prestige-confirm-text" class="Prestige-confirm-text"></p>
+    <div class="Prestige-confirm-buttons">
+      <button onclick="confirmPrestige(true)">확인</button>
+      <button onclick="confirmPrestige(false)">취소</button>
+    </div>
+  </div>
+</div>
+
+  <!-- 팝업 백그라운드 오버레이 -->
+<div id="versionMismatchOverlay" class="popup-overlay">
+  <!-- 팝업창 본체 -->
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()">✖</button>
+    <h2>업데이트 내역</h2>
+    <p>
+      <span id="savedVersion"></span><br>
+      <span id="currentVersion"></span>
+    </p>
+    <div class="update-log">
+      <ul id="updateNotesList">
+        <!-- 업데이트 항목이 여기에 JavaScript로 삽입됩니다 -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="save-slot-overlay" style="display: none;">
+  <div id="save-slot-popup">
+    <h3>💾 세이브 슬롯 선택 💾</h3>
+    <div id="save-slots-container"></div>
+  </div>
+</div>
+
+
+
+  <script src="game.js"></script>
+</body>
+</html>

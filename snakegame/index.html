@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>스네이크 게임 by Ribir</title>
+<link rel="stylesheet" href="css/snake.css">
+</head>
+<body>
+  <label style="color: white; margin-bottom: 5px;">
+    뱀 색상 변경:
+    <input type="color" id="snakeColorPicker" value="#00ff00" style="vertical-align: middle; margin-left: 10px;">
+  </label>
+  <label style="color: white; margin-bottom: 5px;">
+    먹이 색상 변경:
+    <input type="color" id="foodColorPicker" value="#ff0000" style="vertical-align: middle; margin-left: 10px;">
+  </label>
+  <label style="color: white; margin-bottom: 5px;">
+    뱀 이동속도:
+    <input type="range" id="speedRange" min="50" max="500" value="250" step="10" style="vertical-align: middle; width: 150px; margin-left: 10px;">
+    <span id="speedValue">100</span> ms
+  </label>
+  <label style="color: white; margin-bottom: 10px;">
+  <input type="checkbox" id="portalToggle" checked />벽 통과</label>
+  <canvas id="game" width="400" height="400"></canvas>
+  <button id="retry">재시도</button>
+  <script src="snake.js"></script>
+</body>
+</html>

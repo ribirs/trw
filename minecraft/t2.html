@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Simple Minecraft SkyBlock</title>
+    <link rel="stylesheet" href="css.css">
+<style>
+</style>
+</head>
+<body>
+
+<!-- 메뉴 바 -->
+<div id="menu-bar">
+  <button class="menu-button" id="menu-stat" onclick="showPanel('stat')">🧍 인벤</button>
+  <button class="menu-button" id="menu-stat" onclick="showPanel('gettem')">🧱 자원</button>
+  <button class="menu-button" id="menu-stat" onclick="showPanel('craft')">🛠️ 조합</button>
+  <button class="menu-button" id="menu-stat" onclick="showPanel('farm')">🌾 밭</button>
+  <button class="menu-button" id="menu-stat" onclick="showPanel('option')">⚙️ 옵션</button>
+  <button class="menu-button" id="menu-stat" onclick="showPanel('updat')">🚀 업뎃</button>
+  <button class="menu-button" id="reset-game-btn">🔁 리셋</button>
+</div>
+
+<!-- 메인 UI -->
+<div id="main-container">
+  <!-- 메인 정보창 -->
+  <div id="stat" class="content-panel visible">
+    <div id="controls">
+      <!-- <button onclick="sortItems('default')">기본 순서</button> -->
+      <!-- <button onclick="sortItems('reverse')">역순</button> -->
+      <button class="sortbtn" onclick="sortItems('count')">↑</button>
+      <button class="sortbtn" onclick="sortItems('reverse')">↓</button>
+      <button class="sortbtn" onclick="sortItems('normal')">A</button>
+      <button id="sellButton" class="SellOff">판매</button>
+      <span id="Coin"></span>
+    </div>
+      <!-- <hr /> -->
+      <canvas id="itemCanvas"></canvas>
+      <span id="storage"></span>
+      <hr>
+      <p>식사</p>
+    <button id="EatApple" class="hidden eat"><img src="img/Item/Apple.webp" alt="사과" onclick="Eat('Apple')"></button>
+    <button id="EatBread" class="hidden eat"><img src="img/Item/Bread.webp" alt="빵" onclick="Eat('Bread')"></button>
+    <button id="EatGApple" class="hidden eat"><img src="img/Item/Goldapple.webp" alt="황금 사과" onclick="Eat('Goldapple')"></button>
+    <hr>
+  </div>
+  <div id="infoPopup" class="info-popup hidden"></div>
+
+  <!-- 자원 -->
+  <div id="gettem" class="content-panel visible">
+    <button id="Get1" onclick="gatherResource('Axe', 'AxeDura', 'Log','Get1')">참나무 벌목장</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="axeProgress">
+          <span class="progress-text" id="axeProgressText">0%</span>
+        </div>
+      </div>
+      <hr />
+    <button id="Get2" onclick="gatherResource('Pickaxe', 'PickaxeDura', 'Cobblestone','Get2')">하급 조약돌 생성기</button>
+    <div class="progress-container">
+      <div class="progress-bar" id="pickaxeProgress">
+        <span class="progress-text" id="pickaxeProgressText">0%</span>
+      </div>
+    </div>
+    <button id="Get3" onclick="gatherResource('Pickaxe', 'PickaxeDura', 'Iron','Get3')">상급 (내구도5소모)</button>
+    <hr />
+    <button id="Get4" onclick="gatherResource('Shovel', 'ShovelDura', 'Dirt','Get4')">스카이 텃밭</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="shovelProgress">
+          <span class="progress-text" id="shovelProgressText">0%</span>
+        </div>
+      </div>
+    <hr />
+    <button id="Get5" onclick="gatherResource('Sword', 'SwordDura', 'Zombie','Get5')">좀비 사냥</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="swordProgress">
+          <span class="progress-text" id="swordProgressText">0%</span>
+        </div>
+      </div>
+    <hr />
+    <button id="Get11" onclick="gatherResource('Sword', 'SwordDura', 'sheep','Get11')">양 사냥</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="swordProgress">
+          <span class="progress-text" id="swordProgressText">0%</span>
+        </div>
+      </div>
+  </div>
+
+  <!-- 조합 -->
+  <div id="craft" class="content-panel visible">
+    <button id="Chest" class="hidden"><img src="img/Craft/chest.png" alt="상자" onclick="craftChest()"></button>
+    <button id="Log1" class="hidden"><img src="img/Craft/Plank.png" alt="나무 판자" onclick="craft1('Log',1,'Plank',4)"></button>
+    <button id="Plank2" class="hidden"><img src="img/Craft/Stick.png" alt="막대기" onclick="craft1('Plank',2,'Stick',4)"></button>
+    <button id="Bread" class="hidden"><img src="img/Craft/Bread.png" alt="빵" onclick="craft1('Wheat',3,'Bread',1)"></button>
+    <button id="Goldapple" class="hidden"><img src="img/Craft/Goldapple.png" alt="황금 사과" onclick="craft2('GoldIngot',8,'Apple',1,'Goldapple',1)"></button>
+    <button id="Iron8" class="hidden"><img src="img/Craft/IronIngot.png" alt="철괴" onclick="craft2('Iron',8,'Coal',1,'IronIngot',8)"></button>
+    <button id="Gold8" class="hidden"><img src="img/Craft/GoldIngot.png" alt="금괴" onclick="craft2('Gold',8,'Coal',1,'GoldIngot',8)"></button>
+    <!-- 나무 도구 -->
+    <button id="Axe1" class="hidden"><img src="img/Craft/Axe1.png" alt="나무 도끼" 
+      onclick="ToolCraft('Plank',3,'Stick',2,'Axe',1,'AxeDura','AxeDuraMax',59)"></button>
+    <button id="Pickaxe1" class="hidden"><img src="img/Craft/Pickaxe1.png" alt="나무 곡괭이" 
+      onclick="ToolCraft('Plank',3,'Stick',2,'Pickaxe',1,'PickaxeDura','PickaxeDuraMax',59)"></button>
+    <button id="Shovel1" class="hidden"><img src="img/Craft/Shovel1.png" alt="나무 삽" 
+      onclick="ToolCraft('Plank',1,'Stick',2,'Shovel',1,'ShovelDura','ShovelDuraMax',59)"></button>
+    <button id="Sword1" class="hidden"><img src="img/Craft/Sword1.png" alt="나무 검" 
+      onclick="ToolCraft('Plank',2,'Stick',1,'Sword',1,'SwordDura','SwordDuraMax',59)"></button>
+    <button id="Hoe1" class="hidden"><img src="img/Craft/Hoe1.png" alt="나무 괭이" 
+      onclick="ToolCraft('Plank',2,'Stick',2,'Hoe',1,'HoeDura','HoeDuraMax',59)"></button>
+    <!-- 돌 도구 -->
+    <button id="Axe2" class="hidden"><img src="img/Craft/Axe2.png" alt="돌 도끼" 
+      onclick="ToolCraft('Cobblestone',3,'Stick',2,'Axe',2,'AxeDura','AxeDuraMax',131)"></button>
+    <button id="Pickaxe2" class="hidden"><img src="img/Craft/Pickaxe2.png" alt="돌 곡괭이" 
+      onclick="ToolCraft('Cobblestone',3,'Stick',2,'Pickaxe',2,'PickaxeDura','PickaxeDuraMax',131)"></button>
+    <button id="Shovel2" class="hidden"><img src="img/Craft/Shovel2.png" alt="돌 삽" 
+      onclick="ToolCraft('Cobblestone',1,'Stick',2,'Shovel',2,'ShovelDura','ShovelDuraMax',131)"></button>
+    <button id="Sword2" class="hidden"><img src="img/Craft/Sword2.png" alt="돌 검" 
+      onclick="ToolCraft('Cobblestone',2,'Stick',1,'Sword',2,'SwordDura','SwordDuraMax',131)"></button>
+    <button id="Hoe2" class="hidden"><img src="img/Craft/Hoe2.png" alt="돌 괭이" 
+      onclick="ToolCraft('Cobblestone',2,'Stick',2,'Hoe',2,'HoeDura','HoeDuraMax',131)"></button>
+    <!-- 철 도구 -->
+    <button id="Axe3" class="hidden"><img src="img/Craft/Axe3.png" alt="철 도끼" 
+      onclick="ToolCraft('IronIngot',3,'Stick',2,'Axe',3,'AxeDura','AxeDuraMax',250)"></button>
+    <button id="Pickaxe3" class="hidden"><img src="img/Craft/Pickaxe3.png" alt="철 곡괭이" 
+      onclick="ToolCraft('IronIngot',3,'Stick',2,'Pickaxe',3,'PickaxeDura','PickaxeDuraMax',250)"></button>
+    <button id="Shovel3" class="hidden"><img src="img/Craft/Shovel3.png" alt="철 삽" 
+      onclick="ToolCraft('IronIngot',1,'Stick',2,'Shovel',3,'ShovelDura','ShovelDuraMax',250)"></button>
+    <button id="Sword3" class="hidden"><img src="img/Craft/Sword3.png" alt="철 검" 
+      onclick="ToolCraft('IronIngot',2,'Stick',1,'Sword',3,'SwordDura','SwordDuraMax',250)"></button>
+    <button id="Hoe3" class="hidden"><img src="img/Craft/Hoe3.png" alt="철 괭이" 
+      onclick="ToolCraft('IronIngot',2,'Stick',2,'Hoe',3,'HoeDura','HoeDuraMax',250)"></button>
+    <!-- 다이아몬드 도구 -->
+    <button id="Axe4" class="hidden"><img src="img/Craft/Axe4.png" alt="다이아 도끼" 
+      onclick="ToolCraft('Diamond',3,'Stick',2,'Axe',4,'AxeDura','AxeDuraMax',1561)"></button>
+    <button id="Pickaxe4" class="hidden"><img src="img/Craft/Pickaxe4.png" alt="다이아 곡괭이" 
+      onclick="ToolCraft('Diamond',3,'Stick',2,'Pickaxe',4,'PickaxeDura','PickaxeDuraMax',1561)"></button>
+    <button id="Shovel4" class="hidden"><img src="img/Craft/Shovel4.png" alt="다이아 삽" 
+      onclick="ToolCraft('Diamond',1,'Stick',2,'Shovel',4,'ShovelDura','ShovelDuraMax',1561)"></button>
+    <button id="Sword4" class="hidden"><img src="img/Craft/Sword4.png" alt="다이아 검" 
+      onclick="ToolCraft('Diamond',2,'Stick',1,'Sword',4,'SwordDura','SwordDuraMax',1561)"></button>
+    <button id="Hoe4" class="hidden"><img src="img/Craft/Hoe4.png" alt="다이아 괭이" 
+      onclick="ToolCraft('Diamond',2,'Stick',2,'Hoe',4,'HoeDura','HoeDuraMax',1561)"></button>
+  </div>
+  
+  <!-- 농사 -->
+  <div id="farm" class="content-panel visible">
+    <p style="color:red; font-size:12px;">주의사항 : 농경지는 저장되지 않습니다. 빠르게 채집해주세요.</p>
+      <canvas id="farmCanvas" width="450" height="450"></canvas>
+      <hr>
+    <button id="Farm11" class="hidden"><img src="img/Craft/Bonemeal1.png" alt="뼛가루1" onclick="craft1('Apple',3,'Bonemeal',1)"></button>
+    <button id="Farm12" class="hidden"><img src="img/Craft/Bonemeal3.png" alt="뼛가루3" onclick="craft2('Sand',4,'Gravel',5,'Bonemeal',3)"></button>
+  </div>
+
+  <!-- 옵션 -->
+  <div id="option" class="content-panel visible">
+    <label>
+      <input type="checkbox" id="LowTools" checked onclick="drawItems()" />하위 도구를 조합 리스트에서 표기 안함
+    </label>
+    <br>
+    <label>
+      <input type="checkbox" id="SameTools" onclick="drawItems()" />동일 도구도 조합 리스트에서 표기 안함
+    </label>
+    <br>
+    <label>
+      <input type="checkbox" id="LogSmall" checked onclick="drawItems()" />로그값 간소화
+    </label>
+  </div>
+
+  <!-- 업뎃 -->
+  <div id="updat" class="content-panel visible">
+    <div class="text-block">
+      2025.08.11 09:27 <br>
+      아이템 판매 기능 개선 <br>
+      기본 지급 아이템에 빵 3개 대신 사과 5개로 변경 <br>
+      자원 탭에 동물 사냥 기능 추가 <br>
+      자원획득 로직 통합
+    </div>
+  </div>
+  
+
+</div>
+
+<div class="bar-container"><span id="hp">20</span><div id="player-hp-bar" class="hp-bar"></div></div>
+<div class="bar-container"><span id="hg">20</span><div id="player-hg-bar" class="hg-bar"></div></div>
+<div id="toolContainer"></div>
+<!-- 로그창 -->
+<div id="log-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

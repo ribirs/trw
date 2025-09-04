@@ -1,0 +1,141 @@
+@charset "utf-8";
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  background-color: #0a0a0a;
+  color: #00fff9;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* 링크 */
+a {
+  color: #00fff9;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover, a:focus {
+  color: #00d9ff;
+}
+
+/* 배너 */
+.banner {
+  position: relative;
+  background: url(../img/ribir.png) no-repeat center center/cover;
+  height: 350px;
+  overflow: hidden;
+  border-bottom: 3px solid #00fff9;
+  box-shadow: 0 0 20px #00fff9;
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,255,252,0.6) 0%, rgba(0,0,0,0.85) 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.bannertext {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #038d8b;
+  text-shadow:
+    0 0 5px #00fff9,
+    0 0 10px #00fff9,
+    0 0 20px #00fff9,
+    0 0 40px #0ff,
+    0 0 80px #0ff;
+  user-select: none;
+}
+
+.banner h2 {
+  font-weight: 900;
+  font-size: 3rem;
+  letter-spacing: 0.05em; /* 자간 좁힘 */
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.banner h2 Rr {
+  color: #11aac4;
+}
+
+.banner p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+/* 버튼 */
+.banner button {
+  margin-top: 1.5rem;
+  background: none;
+  border: 2px solid #00fff9;
+  color: #00fff9;
+  padding: 12px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow:
+    0 0 10px #00fff9,
+    0 0 20px #00fff9;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.banner button:hover,
+.banner button:focus {
+  background-color: #00d9ff;
+  color: #0a0a0a;
+  box-shadow:
+    0 0 15px #00d9ff,
+    0 0 30px #00d9ff;
+}
+
+/* 컨텐츠 */
+.cont1 {
+  background-color: #111;
+  border-top: 3px solid #00d9ff;
+  max-width: 720px;
+  margin: 1.5rem auto 1.5rem;
+  padding: 30px 20px;
+  box-shadow:
+    0 0 15px #00d9ff;
+  border-radius: 8px;
+  color: #ccc;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.cont1text h3 {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #00d9ff;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em; /* 자간 좁힘 */
+  text-transform: uppercase;
+}
+
+.cont1text p {
+  font-size: 1rem;
+  color: #aaa;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}

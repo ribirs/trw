@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>리비르의 개발 웹 게임</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/trw.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <header>
+    <div class="site-title glitch">Ribir's Creative Web Game</div>
+    <!-- <nav class="user-menu">
+      <button id="signupBtn">회원가입</button>
+      <button id="loginBtn">로그인</button>
+    </nav> -->
+  </header>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="게임명 또는 설명 검색..." />
+  </div>
+  <div class="notice">
+    <a id="openPopup2"><span>필독 공지사항</span></a>
+  </div>
+  <div class="warning">
+    <a id="openPopup"><span>게임 화면이 일부 안보이시는 분들 필독</span></a>
+  </div>
+  <!-- 팝업 오버레이 -->
+  <div class="popup-overlay2" id="popup2">
+    <div class="popup-content2">
+      <button class="close-btn2" id="closeBtn2">X</button>
+      <span>이 웹사이트는<br>2025년6월부터 학습한<br><a href="https://www.work24.go.kr/hr/a/a/3100/selectTracseDetl.do?tracseId=AIG20240000482895&tracseTme=1&cstmConsTme=&crseTracseSe=C0061&trainstCstmrId=500020016713&tracseReqstsCd=&focusId=" style="color:lightblue">프론트엔드 웹개발과정</a>을<br>경험하며 익힌 기술을 바탕으로<br>포트폴리오 용도로<br>제작중인 사이트입니다. <br><br>아직 많이 미숙하고 부족한 부분이 많지만<br>많은 분들의 정성어린 피드백이<br>올바른 방향으로 사이트를<br>풍족하게 만들어갈 것입니다. </span>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popup">
+    <div class="popup-content">
+      <button class="close-btn" id="closeBtn">X</button>
+      <div id="deviceSize">화면 정보를 불러오는 중...</div>
+      <span>화면 크기와 함께<br>화면이 잘린 내역을 캡쳐하여<br>ribir@naver.com 으로 보내주시면<br>빠르게 패치해드릴 수 있습니다.</span>
+      <br><br>
+      <span>그 외, 신규게임 추가요청,<br>컨텐츠 개선,<br>밸런스 수정,<br>버그 제보 등<br>메일로 제보해주세요. </span>
+      <address>ribir@naver.com</address>
+    </div>
+  </div>
+  
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">전체</button>
+    <button class="filter-btn btnred" data-filter="favorites">♥</button>
+    <button class="filter-btn" data-filter="두뇌">두뇌</button>
+    <button class="filter-btn" data-filter="방치형">방치형</button>
+    <button class="filter-btn" data-filter="레트로">레트로</button>
+    <button class="filter-btn" data-filter="슈팅">슈팅</button>
+    <button class="filter-btn" data-filter="아케이드">아케이드</button>
+    <button class="filter-btn" data-filter="New">New</button>
+    <button class="filter-btn" data-filter="하드코어">하드코어</button>
+    <button class="filter-btn" data-filter="Update">Update</button>
+    <button class="filter-btn" data-filter="세이브">세이브</button>
+    <button class="filter-btn" data-filter="3D아트">3D</button>
+    <button class="filter-btn" data-filter="텍스트">텍스트</button>
+    <button class="filter-btn" data-filter="RPG">RPG</button>
+  </div>
+  <div class="guide">
+    <a><span>이미지를 클릭하면 해당 게임을 즐길 수 있습니다.</span></a>
+  </div>
+  <main>
+    
+    <div class="game-card" data-tags="New,텍스트">
+      <a href="http://ribir.dothome.co.kr/Slash/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g30.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">무협 육성 시뮬레이션</h2>
+        <p class="game-desc">
+          무협 세계에 환생하여 최고의 경지에 도달하기 위해 노력하세요!
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#New</span>
+        <span class="tag">#텍스트</span>
+      </div>
+      <div class="lastupdate">2025.09.04 12:01</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️⭐️⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="두뇌">
+      <a href="http://ribir.dothome.co.kr/number/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g29.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">숫자를 찾아라</h2>
+        <p class="game-desc">
+          아주 간단한 숫자 맞추는 게임입니다. 1~1000 숫자중 정답이 있구요.<br>소숫점 2째자리까지 맞춰야 합니다.ㅋㅋ
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#두뇌</span>
+      </div>
+      <div class="lastupdate">2025.08.26 15:55</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="세이브,텍스트,Update">
+      <a href="http://ribir.dothome.co.kr/CCG/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g28.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">CCG</h2>
+        <p class="game-desc">
+          Collectible Card Game를 새롭게 개발해보았습니다. 기본 베이스는 오래전 블로그에 올린 <a href="https://blog.naver.com/ribir/221080971772" style="color:rgb(103, 103, 246); text-decoration: underline;">게시글</a>을 바탕으로 제작하였습니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#세이브</span>
+        <span class="tag">#텍스트</span>
+        <span class="tag">#Update</span>
+      </div>
+      <div class="lastupdate">2025.08.28 12:14</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="두뇌,레트로">
+      <a href="http://ribir.dothome.co.kr/tetris2/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g27.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">New 테트리스</h2>
+        <p class="game-desc">
+          색다른 스타일의 테트리스입니다. 반드시 3 혹은 4줄씩 클리어해야 점수를 얻습니다. 중력이 삭제됩니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#두뇌</span>
+        <span class="tag">#레트로</span>
+      </div>
+      <div class="lastupdate">2025.08.12 11:00</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="아케이드">
+      <a href="http://ribir.dothome.co.kr/DDR/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g26.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">DDR</h2>
+        <p class="game-desc">
+          DDR 웹버젼입니다. PC에선 방향키로, 모바일에선 아래 버튼 4종으로 즐길 수 있습니다. <br>
+          최초로 일시정지 기능을 구현하였습니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#아케이드</span>
+      </div>
+      <div class="lastupdate">2025.08.12 11:00</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️</div>
+    </div>
+    
+    <div class="game-card" data-tags="세이브,텍스트">
+      <a href="http://ribir.dothome.co.kr/minecraft/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g24.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">마크 시뮬 텍스트</h2>
+        <p class="game-desc">
+          마인크래프트 스카이블럭 텍스트 게임 버젼입니다. 기본 제작툴은 고전RPG를 변형시켜 만들었습니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#세이브</span>
+        <span class="tag">#텍스트</span>
+      </div>
+      <div class="lastupdate">2025.08.11 13:24</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="New,세이브,텍스트,RPG">
+      <a href="http://ribir.dothome.co.kr/rpg/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g25.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">고전RPG</h2>
+        <p class="game-desc">
+          평범한 RPG 게임을 텍스트 버젼으로 제작해보았습니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#New</span>
+        <span class="tag">#세이브</span>
+        <span class="tag">#텍스트</span>
+        <span class="tag">#RPG</span>
+      </div>
+      <div class="lastupdate">2025.08.07 16:33</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️⭐️</div>
+    </div>
+    
+    <div class="game-card" data-tags="아케이드,세이브">
+      <a href="http://ribir.dothome.co.kr/io/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g23.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">io 게임</h2>
+        <p class="game-desc">
+          타임킬링용 io게임입니다. 손가락으로 움직여 숫자를 한계까지 올려보세요. 죽거나 승리할경우 5초 후 재시작합니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#아케이드</span>
+        <span class="tag">#세이브</span>
+      </div>
+      <div class="lastupdate">2025.08.06 12:05</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️</div>
+    </div>
+    
+    <div class="game-card" data-tags="두뇌,레트로,하드코어">
+      <a href="http://ribir.dothome.co.kr/Pentomino/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g22.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">펜토미노</h2>
+        <p class="game-desc">
+          평범한 테트리스가 지겹다면 5개의 블록으로 된 펜토미노를 즐겨보세요. 기존보다 너비도 넓고 높이도 늘어나서 하드코어를 경험하실 수 있습니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#두뇌</span>
+        <span class="tag">#레트로</span>
+        <span class="tag">#하드코어</span>
+      </div>
+      <div class="lastupdate">2025.08.05 14:28</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️⭐️⭐️⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="두뇌,레트로">
+      <a href="http://ribir.dothome.co.kr/tetris/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g19.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">테트리스</h2>
+        <p class="game-desc">
+          같은 줄 블록을 채우면 사라지고 점수를 얻습니다. 1분마다 아래에서 블록이 올라옵니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#두뇌</span>
+        <span class="tag">#레트로</span>
+      </div>
+      <div class="lastupdate">2025.08.04 14:34</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="두뇌,레트로">
+      <a href="http://ribir.dothome.co.kr/hexa1/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g17.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">헥사 게임</h2>
+        <p class="game-desc">
+          가로, 세로, 대각선 3개 이상의 무늬가 같으면 점수를 얻고 블록이 사라집니다. 위 방향키로 순서를 바꾸고 아래 방향키로 빠르게 내릴 수 있습니다.
+    </p></div>
+      <div class="tag-list">
+        <span class="tag">#두뇌</span>
+        <span class="tag">#레트로</span>
+      </div>
+      <div class="lastupdate">2025.08.05 11:15</div>
+      <div class="platform-icons">
+        <span class="pc"></span>
+        <span class="mobile"></span>
+      </div>
+      <div id="Diffi">난이도 : ⭐️⭐️⭐️</div>
+    </div>
+
+    <div class="game-card" data-tags="슈팅,레트로">
+      <a href="http://ribir.dothome.co.kr/galaga/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g18.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">갤러그</h2>
+        <p class="game-desc">
+          비행기를 조종하여 내려오는 외계인을 쏴 맞추면 됩니다. 8초마다 내려오는 보너스 비행선을 놓치지 마세요.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#슈팅</span>
+      <span class="tag">#레트로</span>
+    </div>
+    <div class="lastupdate">2025.08.05 11:49</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div>
+    <div id="Diffi">난이도 : ⭐️</div></div>
+    
+    <div class="game-card" data-tags="아케이드,레트로">
+      <a href="http://ribir.dothome.co.kr/dodge/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g12.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">Web 뉴닷지</h2>
+        <p class="game-desc">
+          초록공을 움직여 최대한 오래 살아남아야 합니다. 2스테이지부터 빠르게 당신을 저격하기 시작합니다.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#아케이드</span>
+      <span class="tag">#레트로</span>
+    </div>
+    <div class="lastupdate">2025.08.05 10:36</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div>
+    <div id="Diffi">난이도 : ⭐️⭐️</div></div>
+
+    <div class="game-card" data-tags="두뇌,방치형,세이브">
+      <a href="http://ribir.dothome.co.kr/shop/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g16.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">부동산 투자 게임</h2>
+        <p class="game-desc">
+          30단계로 이루어진 부동산 매물과 매달 10일마다 시세가 변경되는 가상의 부동산 시세등락을 경험하여 일확천금을 벌어보세요.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#두뇌</span>
+      <span class="tag">#방치형</span>
+      <span class="tag">#세이브</span>
+    </div>
+    <div class="lastupdate">2025.07.31 11:02</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div>
+    <div id="Diffi">난이도 : ⭐️</div></div>
+
+    <div class="game-card" data-tags="타이쿤,방치형,세이브">
+      <a href="http://ribir.dothome.co.kr/idle/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g15.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">방치형 idle 게임</h2>
+        <p class="game-desc">
+          블록을 정화하고 땅을 넓혀가며 자원을 얻고 레벨을 올리세요. 레벨 100까지 풍부한 컨텐츠를 즐겨봐요.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#타이쿤</span>
+      <span class="tag">#방치형</span>
+      <span class="tag">#세이브</span>
+    </div>
+    <div class="lastupdate">2025.07.31 12:33</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div>
+    <div id="Diffi">난이도 : ⭐️⭐️⭐️⭐️⭐️</div></div>
+
+    <div class="game-card" data-tags="아케이드,레트로">
+      <a href="http://ribir.dothome.co.kr/snakegame/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g14.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">스네이크 게임</h2>
+        <p class="game-desc">
+          상하좌우로 움직이며 빨간 사과를 먹고 점점 길어지는 자신의 몸통을 잘 관리해보세요.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#아케이드</span>
+      <span class="tag">#레트로</span>
+    </div>
+    <div class="lastupdate">2025.07.29 15:16</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div>
+    <div id="Diffi">난이도 : ⭐️⭐️</div></div>
+
+    <div class="game-card" data-tags="게임 아님,3D아트">
+      <a href="http://ribir.dothome.co.kr/tardis/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g20.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">3D TARDIS</h2>
+        <p class="game-desc">
+          이는 게임이 아닙니다. 후비안으로써 타디스를 만들어보았습니다. 3D로 만든 두번째 작품
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#게임 아님</span>
+      <span class="tag">#3D아트</span>
+    </div>
+    <div class="lastupdate">2025.08.04 16:36</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div></div>
+
+    <div class="game-card" data-tags="게임 아님,3D아트">
+      <a href="http://ribir.dothome.co.kr/dice/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g21.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">3D 주사위</h2>
+        <p class="game-desc">
+          게임은 아니고 그냥 회전하는 3D 주사위를 만들어보았습니다. 3D로 만든 첫번째 작품
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#게임 아님</span>
+      <span class="tag">#3D아트</span>
+    </div>
+    <div class="lastupdate">2025.08.04 15:18</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div></div>
+
+    <!-- <div class="game-card" data-tags="아케이드,레트로">
+      <a href="http://ribir.dothome.co.kr/block2/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g13.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">벽돌깨기</h2>
+        <p class="game-desc">
+          이번부터 스마트폰에서 조작하기 편하게 설계하기 위해 노력하였다. 처음으로 옵션창을 구현하여 특정 내부 코드를 쉽게 조작할 수 있도록 하였다.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#아케이드</span>
+      <span class="tag">#레트로</span>
+    </div>
+    <div class="lastupdate">2025.07.30 16:48</div>
+    <div class="platform-icons">
+      <span class="pc"></span>
+      <span class="mobile"></span>
+    </div></div> -->
+
+
+    <!-- <div class="game-card" data-tags="아케이드,테스트,세이브">
+      <a href="http://ribir.dothome.co.kr/ball2/" target="_blank" rel="noopener noreferrer">
+        <img src="img/g11.PNG" alt=" 이미지" class="game-image" /></a>
+      <div class="game-content">
+        <div class="favorite-btn" title="즐겨찾기"><span class="heart">&#9825;</span></div>
+        <h2 class="game-title">공 컨트롤 게임</h2>
+        <p class="game-desc">
+          웹개발로 가장 처음으로 개발한 첫 작품. 허접하지만 기본적인 시스템은 갖추었다. 아직 PC , 모바일 구분을 잘 하지 못해 모바일에 더 편하게 제작되었다.
+    </p></div>
+    <div class="tag-list">
+      <span class="tag">#아케이드</span>
+      <span class="tag">#테스트</span>
+      <span class="tag">#세이브</span>
+    </div>
+    <div class="lastupdate">2025.08.03 09:14</div>
+    <div class="platform-icons">
+      <span class="mobile"></span>
+    </div></div> -->
+
+  </main>
+  
+<!-- 로그인 모달 -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeLogin">&times;</span>
+    <h2>로그인</h2>
+    <form id="loginForm">
+      <label for="loginEmail">이메일</label>
+      <input type="email" id="loginEmail" required />
+      <label for="loginPassword">비밀번호</label>
+      <input type="password" id="loginPassword" required />
+      <button type="submit">로그인</button>
+    </form>
+  </div>
+</div>
+
+<!-- 회원가입 모달 -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSignup">&times;</span>
+    <h2>회원가입</h2>
+    <form id="signupForm">
+      <label for="signupEmail">이메일</label>
+      <input type="email" id="signupEmail" required />
+      <label for="signupPassword">비밀번호</label>
+      <input type="password" id="signupPassword" required />
+      <label for="signupPasswordConfirm">비밀번호 확인</label>
+      <input type="password" id="signupPasswordConfirm" required />
+      <button type="submit">회원가입</button>
+    </form>
+  </div>
+</div>
+
+
+  <footer>
+    &copy; 2025 Ribir Game Community. All rights reserved.
+  </footer>
+  <!-- <script src="login.js"></script> -->
+  <script src="skript.js"></script>
+</body>
+</html>

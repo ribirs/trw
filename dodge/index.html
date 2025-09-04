@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>뉴닷지</title>
+  <link rel="stylesheet" href="css/dodge.css">
+  </head>
+  <body>
+    <div id="start-screen">
+      <h1>Web 뉴닷지</h1>
+      <a href="https://blog.naver.com/ribir/223874432339" id="origin">[원작 해보기]</a>
+    <button id="start-btn">게임 시작</button>
+    
+    <div id="options" style="margin-top: 20px; text-align: center; width: 250px;">
+      <label for="player-speed">내 공 속도: <span id="player-speed-val">4</span></label>
+      <input type="range" id="player-speed" min="1" max="10" value="4" />
+      <br/><br/>
+      <label for="enemy-speed">적 공 속도: <span id="enemy-speed-val">4</span></label>
+      <input type="range" id="enemy-speed" min="1" max="10" value="4" />
+    </div>
+    
+    </div>
+    <div id="center-circle"></div>
+    <div id="hud">00분 00.000초 | 1 스테이지</div>
+    <div id="pos-info">X000 Y000 | 점수: 0</div>
+    <div id="player"></div>
+    <div id="overlay">
+      <div>Game Over</div>
+      <div id="final-score"></div>
+      <div id="final-stage"></div>
+      <div id="final-time"></div>
+      <div id="high-record"></div>  <!-- 추가 -->
+      <button id="retry-btn">재시도</button>
+    </div>
+
+    <script src="css/script.js"></script>
+</body>
+</html>

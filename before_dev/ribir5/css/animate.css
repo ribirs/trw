@@ -1,0 +1,109 @@
+@charset "utf-8";
+
+.animated {animation-duration: 1s;}
+.animated5 {animation-duration: 5s;}
+
+.fadeInLeft {animation-name: fadeInLeft;}
+/* 왼쪽에서 오른쪽으로 나타남 */
+@keyframes fadeInLeft {
+    0%{
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fadeInLeft2 {animation-name: fadeInLeft2;}
+/* 왼쪽에서 오른쪽으로 나타남 */
+@keyframes fadeInLeft2 {
+    0%{
+        opacity: 0;
+        transform: translateX(-200px);
+    }
+    50%{
+        opacity: 0.5;
+        transform: translateX(200px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fadeInLeft3 {animation-name: fadeInLeft3;}
+/* 왼쪽에서 오른쪽으로 나타남 */
+@keyframes fadeInLeft3 {
+    0%{
+        opacity: 0;
+        transform: translateX(-200px);
+    }
+    10%{
+        opacity: 0.1;
+        transform: translateX(200px);
+    }
+    20%{
+        opacity: 0.2;
+        transform: translateX(-200px);
+    }
+    30%{
+        opacity: 0.3;
+        transform: translateX(200px);
+    }
+    40%{
+        opacity: 0.4;
+        transform: translateX(-200px);
+    }
+    50%{
+        opacity: 0.5;
+        transform: translateX(200px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fadeInUp {animation-name: fadeInUp;}
+/* 아래에서 위로 올라옴 */
+@keyframes fadeInUp {
+    0%{
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fadeInUp2 {animation-name: fadeInUp2;}
+/* 아래에서 위로 올라옴 */
+@keyframes fadeInUp2 {
+    0%{
+        opacity: 0;
+        transform: translateY(200px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fadeInOut {animation-name: fadeInOut;}
+/* 위에서 아래로 올라옴 */
+@keyframes fadeInOut {
+    0%{
+        opacity: 0;
+        transform: translateY(0);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(20px);
+    }
+}
+
+.delay-05s {animation-delay:0.5s;}
+.delay-1s {animation-delay:1s;}

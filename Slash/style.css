@@ -1,0 +1,658 @@
+body { margin: 0; font-family: Arial, sans-serif; overflow-x: hidden; background-color: #f3e5c0; }
+/* 좌우 사이드 패널 공통 */
+#custom-date-display {
+  font-size: 13px;
+  margin:5px 0 0 15px;
+}
+.side-panel {
+  position: fixed;
+  top: 0px; /* 상단 버튼 영역 고려 */
+  height: 80vh; /* 로그창을 가리지 않도록 */
+  width: 40%;
+  max-width:200px;
+  background: #fff8dc; /* 기존 로그 배경 비슷하게 조정 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  padding: 20px;
+  z-index: 3000;
+  border-radius: 0 10px 10px 0;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+/* 좌측 패널 열림/닫힘 */
+.open-left { left: 0; transform: translateX(0); border-radius: 0 10px 10px 0; }
+.close-left { left: 0; transform: translateX(-100%); }
+/* 우측 패널 열림/닫힘 */
+.open-right { right: 0; transform: translateX(0); border-radius: 10px 0 0 10px; }
+.close-right { right: 0; transform: translateX(100%); }
+/* 상단 가운데 고정 버튼 영역 */
+#topButtons {
+  position: fixed; top: 5px; left: 50%; transform: translateX(-50%); z-index: 1100;
+  background: #fff8dc; padding: 10px; border-radius: 10px; box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  user-select: none; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+/* 버튼 공통 스타일 */
+#topButtons button { font-size: 24px; cursor: pointer; background-color: #e6c200; border: none;
+  border-radius: 35px; padding: 10px 20px; transition: background-color 0.3s ease;
+  width: 80px; text-align: center; }
+
+/* 버튼 hover 효과 */
+#topButtons button:hover { background-color: #d4af37; }
+
+/* 행동 버튼 */
+.action-button {
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, #8b2000 0%, #e95c24 100%);
+  border: 2px solid #f2d93e;
+  border-radius: 20px;
+  color: #fffce6;
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+  font-size: 0.9rem; /* 약 80% 크기 */
+  font-weight: 800;
+  padding: 5px 10px; /* 좌우 여백 줄임 */
+  cursor: pointer;
+  box-shadow:
+    0 5px 8px rgba(0,0,0,0.7),
+    inset 0 0 15px #f8e06a;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.85);
+  transition: all 0.3s ease;
+  user-select: none;
+  letter-spacing: 1.2px;
+  text-align: center;
+  margin: 5px 0; /* 세로 간격만 */
+}
+
+.action-button:hover {
+  background: linear-gradient(145deg, #b14304 0%, #ff894c 100%);
+  box-shadow:
+    0 7px 12px rgba(0,0,0,0.9),
+    inset 0 0 20px #fff08c;
+  color: #fffef3;
+  transform: scale(1.03);
+}
+
+.action-button:active {
+  background: linear-gradient(145deg, #6a1a00 0%, #c3570d 100%);
+  box-shadow:
+    inset 0 0 25px #d9bc3f;
+  transform: scale(0.97);
+}
+
+/* 행동 패널 헤더 - 우측 행동창 상단 */
+
+/* 스텟창 문단 스타일 */
+.stats-main p { font-size: 16px; margin: 6px 0; line-height: 1; color: #333;}
+.stats-container { display: flex; flex-direction: column; padding: 3px;
+  background: #1a1308; border-radius: 12px; box-shadow: 0 0 15px #a8792f inset;
+  color: #f3e8c8; font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;}
+.stats-container p { margin: 4px 0; line-height: 1.3; font-size: 16px; }
+.basic-stats p {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  position: relative;
+  padding-left: 3px;
+}
+
+/* 필요에 따라 추가 */
+/* 상세 스탯 영역 세로 나열 */
+.detailed-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+/* 각 stat-item 가로폭 100% */
+.stat-item {
+  background: #34270a;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding-left: 5px;
+  box-shadow: 0 0 10px #d9c575 inset;
+  width: 100%;
+  box-sizing: border-box;
+  color:skyblue;
+}
+.stat-item span{
+  color:#f3e8c8;
+}
+.stat-item span#All{
+  color:aquamarine;
+}
+
+
+/* 진행바(예: 체력) - 별도 추가 가능 */
+.progress-bar {
+  height: 14px;
+  background: #3e2f0f;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e9a41e, #f8d23c);
+  box-shadow: 0 0 5px #f8d23c;
+}
+
+
+
+/* 로그창 스타일 유지 (필요하면 여기서 조절) */
+/* 로그창 하단 고정, 전체 화면 너비, 높이 30% */
+#log {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20vh; /* 화면 높이 30% */
+  background-color: #222; /* 어두운 배경 */
+  border-top: 2px solid #444;
+  overflow: hidden;
+  z-index: 1; /* 슬라이드 패널보다 낮게 */
+  font-family: monospace;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+/* 로그 내용을 담는 컨테이너 - 스크롤 영역 */
+#log-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+  font-size: 14px;
+}
+
+/* 스크롤바 스타일 (크롬, 엣지, 사파리) */
+#log-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+#log-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#log-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+/* 개별 로그 항목 스타일 */
+#log-container > div {
+  margin-bottom: 4px;
+  line-height: 1.3;
+  white-space: pre-wrap;
+}
+
+/* 세이브 로드 */
+/* 팝업 배경 */
+#loadPopup {
+  position: fixed;
+  top: 1%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  max-width: 550px;
+  height: 95vh;
+  background: rgba(20, 20, 20, 0.95);
+  border: 3px solid #d4af37;
+  border-radius: 15px;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #fff;
+  font-family: 'Nanum Myeongjo', serif; /* 무협 느낌 폰트 예시 */
+  z-index: 9999;
+  overflow-y: auto;
+}
+
+#loadPopup h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: #d4af37;
+}
+
+/* 슬롯 컨테이너 */
+#saveSlots {
+  display: flex;
+  flex-direction: column;
+  
+  max-width: 500px;
+  gap: 10px;
+  /* max-height: 70vh; 팝업 내에서 스크롤 영역 높이 조절 */
+  overflow-y: auto;
+  /* padding-right: 10px; 스크롤바 여유 공간 */
+}
+
+/* 슬롯 버튼 */
+.saveSlotBtn {
+  width: 100%; /* 팝업 너비에 꽉 차도록 */
+  text-align: left;
+  font-size: 1.1em;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 2px solid #d4af37;
+  background-color: #222;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.saveSlotBtn:hover {
+  background-color: #d4af37;
+  color: #111;
+}
+
+.saveSlotBtn .slotTitle {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #f0c75e;
+}
+
+.saveSlotBtn .slotInfo {
+  font-size: 0.9em;
+  line-height: 1.4em;
+}
+/* 문파 선택 팝업 */
+.popup {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-height: 80%;
+  background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
+  color: #fff;
+  border: 3px solid #c19a6b;
+  padding: 25px;
+  overflow-y: auto;
+  z-index: 91999;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  font-family: 'Gugi', 'Noto Serif KR', 'Nanum Myeongjo', serif;
+  border-radius: 15px;
+}
+
+/* 문파 리스트 컨테이너 */
+.sectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 각 문파 선택 버튼 */
+.sectOptionBtn {
+  background: radial-gradient(circle at top left, #333, #1c1c1c);
+  border: 2px solid #a67c52;
+  color: #f8f8f8;
+  padding: 12px 18px;
+  font-size: 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  border-radius: 8px;
+  font-family: 'Gugi', 'Noto Serif KR', 'Nanum Myeongjo', serif;
+  position: relative;
+}
+
+/* Hover 시 효과 */
+.sectOptionBtn:hover {
+  background: #2f1f0f;
+  border-color: #ffcc80;
+  transform: scale(1.02);
+}
+
+/* 선택된 버튼 강조 스타일 (선택적으로 사용 가능) */
+.sectOptionBtn.selected {
+  background: #3a2612;
+  border-color: gold;
+}
+
+/* 체력바, 내공바 */
+.stat-bar-container {
+  width: 100%;
+  background-color: #333;
+  height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.stat-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.health-bar {
+  background-color: #d33; /* 붉은색 */
+}
+
+.energy-bar {
+  background-color: #5ccfff; /* 하늘색 */
+}
+
+/* 혈통 */
+/* 선택 배경 영역 */
+#lineage-selection {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 500px;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  box-sizing: border-box;
+
+  height: auto;          /* 높이를 내용에 맞게 자동 조절 */
+  max-height: 90vh;      /* 너무 클 경우 스크롤 */
+  overflow-y: auto;      /* 내용 넘치면 스크롤 가능 */
+}
+
+
+/* 버튼 묶음 컨테이너 */
+#lineage-options {
+  width: 100%;
+  /* height: 100%; */
+  /* max-width: 500px; */
+  background: #1c1c1c;
+  border: 2px solid #5e3a1c;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 30px;
+  /* overflow-y: auto; */
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+  box-sizing: border-box;
+  
+  /* ✨ 버튼 수만큼 자동으로 높이 조절되게 */
+  height: auto;
+  max-height: none;
+  overflow-y: visible;
+}
+
+#lineage-selection > h3,#lineage-selection > h5  {
+  color: #fff8dc;
+  text-align: center;
+  margin:0 auto;
+  padding: 10px;
+}
+
+#lineage-options button {
+  width: 100%;
+  padding: 14px 24px;
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: bold;
+  font-size: 1.15em;
+  color: #fff8dc;
+  background: linear-gradient(135deg, #8b4513, #d2b48c);
+  border: 2px solid #654321;
+  border-radius: 12px;
+  box-shadow: 0 0 5px #ffd700, inset 0 0 10px #deb887;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  text-align: center;
+  text-shadow: 1px 1px 2px #3e2f1c;
+}
+
+#lineage-options button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #d2b48c, #8b4513);
+  box-shadow: 0 0 10px #ffd700, inset 0 0 15px #deb887;
+  color: #ffffff;
+}
+
+#lineage-options button.selected {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #fff8dc, #deb887);
+  box-shadow: 0 0 15px #ffd700, inset 0 0 20px #ffd700;
+  color: #654321;
+}
+
+/* 페이지네이션 전체 컨테이너 */
+.pagination-container {
+  margin-top: 10px;
+  text-align: center;
+  font-family: 'Nanum Myeongjo', serif; /* 전통풍 폰트 */
+}
+
+/* 페이지 번호 텍스트 */
+.pagination-page-info {
+  margin: 0 5px;
+  color: brown;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* 페이지네이션 버튼 공통 */
+.pagination-button {
+  background-color: #e6d6c6;
+  color: darkred;
+  /* border: 2px solid sienna; */
+  border:none;
+  border-radius: 4px;
+  padding: 1px 2px;
+  /* margin: 0 5px; */
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 마우스 오버 효과 */
+.pagination-button:hover:not(:disabled) {
+  background-color: #e0c4a8;
+  color: black;
+}
+
+/* 비활성화 상태 */
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.deleteSlotBtn {
+  background-color: #f4e2d8; /* 연한 베이지 */
+  color: darkred;
+  border: 2px solid sienna;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+/* 마우스 오버 효과 */
+.deleteSlotBtn:hover {
+  background-color: #ed953c;
+  color: rgb(255, 255, 255);
+}
+
+/* 인벤토리 팝업 */
+
+.popup2 {
+  position: fixed;
+  top: 60px; /* 상단 버튼 영역 고려 */
+  right:0;
+  height: 70vh; /* 로그창을 가리지 않도록 */
+  width: 58%;
+  max-width:270px;
+  background: linear-gradient(to bottom right, #fdf6e3, #f1e0c5);
+  border: 4px solid #4a2c1e;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+  z-index: 91000;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  font-family: 'Noto Serif KR', serif;
+  color: #1a1a1a;
+  border-radius: 8px;
+}
+
+
+/* 아이템 블록 */
+.item {
+  display: flex;
+  width: 100%;
+  border-bottom: 2px dashed #aa9270;
+  padding: 15px 0;
+  align-items: center;
+}
+
+/* 이미지 영역 */
+.item-image {
+  flex: 0 0 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-image img {
+  max-width: 80px;
+  height: auto;
+  border: 2px solid #4a2c1e;
+  background-color: #f3e5c0;
+  padding: 4px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s ease-in-out;
+}
+.item-image img:hover {
+  border: 0;
+  margin-right: 20px;
+  background-color: rgba(255,255,255,0);
+  box-shadow: 2px 2px 5px rgba(255,255,255,0.1);
+  transform: scale(2) translateX(5px);
+}
+
+/* 정보 영역 */
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 12px;
+}
+
+.item-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #2f1b0c;
+}
+
+.item-hanja {
+  font-size: 0.6rem;
+  color: #6b4f3b;
+  margin-top: 2px;
+  font-weight: bold;
+}
+
+/* 버튼 */
+.item-buttons {
+  margin-top: 4px;
+  display: block;
+  /* width:220px; */
+}
+
+.item-buttons button {
+  margin-right: 5px;
+  padding: 3px 6px;
+  width:45%;
+  background-color: #7e4b27;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Noto Serif KR', serif;
+  font-weight: bold;
+  font-size: 0.7rem;
+  cursor: pointer;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+}
+
+.item-buttons button.buy {
+  background-color: #27557e;
+}
+.item-buttons button.Sell {
+  background-color: #7e2761;
+}
+
+.item-buttons button:hover {
+  background-color: #a55c30;
+  transform: scale(1.1);
+}
+.item-buttons button.buy:hover {
+  background-color: #3961b7;
+  transform: scale(1.1);
+}
+.item-buttons button.Sell:hover {
+  background-color: #d04ece;
+  transform: scale(1.1);
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999; /* 가장 뒤로 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.25;
+  pointer-events: none; /* 배경 클릭 방지 */
+}
+
+/* 기본: 데스크탑 및 태블릿 */
+.background-image {
+  background-image: url('img/bg1.webp');
+}
+
+/* 모바일: 화면 너비 768px 이하 */
+@media (max-width: 768px) {
+  .background-image {
+    background-image: url('img/bg2.webp');
+  }
+}
+
+.popup3 {
+  position: fixed;
+  top: 60px; /* 상단 버튼 영역 고려 */
+  right:0;
+  height: 70vh; /* 로그창을 가리지 않도록 */
+  width: 58%;
+  max-width:270px;
+  background: linear-gradient(to bottom right, #fdf6e3, #f1e0c5);
+  border: 4px solid #4a2c1e;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+  z-index: 91000;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  font-family: 'Noto Serif KR', serif;
+  color: #1a1a1a;
+  border-radius: 8px;
+}
+
+/* 숨김 처리 */
+.hidden {
+  display: none;
+}

@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+*,*:after, *:before {box-sizing: border-box;}
+a {text-decoration: none;color:white;}
+header {width:800px; height:100%;background:#000;
+        position:fixed;top:0;left:-675px;
+}
+/* body {background: rgb(83, 122, 127) url(../img/icon.png);} */
+
+b {color:cyan;}
+cy {color:darkcyan;}
+.NotClick {cursor:default; color:cyan;}
+.Rink:after {content:"Rink";padding:5px;background: palevioletred;border-radius: 5px;margin-left:10px;color:white;
+                font-size:12px;
+}
+
+/* 1 depth */
+#gnb {width:320px;position:absolute;top:10px;right:0px;}
+#gnb > li {position: relative;}
+#gnb > li > a {display: block; width:320px; height:30px;
+                font:bold 18px/2 arial;color:white;
+                padding-right:10px;text-align: right;
+}
+#gnb > li:hover > a {background:gray;color:#333;}
+#gnb em {display:inline-block; transform:skewX(5deg);}
+
+/* 2 depth */
+#gnb ul {position:absolute;left:9999px;top:0;opacity: 0;
+        transition: all 0.35s;
+}
+#gnb>li:hover ul {opacity: 0.8; left:320px;}
+#gnb ul a {display:block;width:450px;height:40px;
+        background:#222;font:bold 18px/2.5 arial;
+        color:white;padding-left:10px;
+        margin-bottom:3px;transition: all 0.5ms;
+}
+#gnb ul a:hover {background:cyan;color:black;}

@@ -1,0 +1,187 @@
+@charset "utf-8";
+
+*,*:after, *:before {box-sizing: border-box;}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none; /* ← 선택적으로 사용 가능 */
+}
+#top-bar {
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 8px;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #444;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+/* 점수, 시간, 다음 블록 영역 스타일 */
+#score, #elapsed-time {
+  font-size: 0.8rem;
+  margin: 1px 0;
+  text-shadow: 0 0 3px #00d4ff;
+  user-select: none;
+}
+#container {
+  display: flex;
+}
+#next-blocks {
+  margin-top:50px;
+  width: 30px; margin-right: 50px; font-size: 32px; 
+  line-height: 1.5; text-align: center; 
+  user-select:none;
+  height:150px;
+}
+body {
+  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  padding: 70px 0;
+  box-sizing: border-box;
+  height: calc(var(--vh, 1vh) * 100);
+  justify-content: flex-start;
+  /* width:100%; */
+}
+#game {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  gap: 1px;
+  background: #000000; /* 배경 흰색 */
+  width: 300px;  /* 부모 가로폭에 맞춤 */
+  max-width: 400px; /* 최대 크기 제한(원하면) */
+  aspect-ratio: 10 / 15; /* 가로세로 비율 맞춤 */
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.cell {
+  /* 셀 크기는 grid가 자동 계산 */
+  font-size: 40px; /* 이모지 크기 조절 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#next-blocks div {
+  background: linear-gradient(145deg, #e4ffa6, #b0e84d);
+  border-radius: 8px;
+  width:40px;
+  height:40px;
+  font-size: 24px;
+  justify-content: center;
+  align-items: center;
+  
+  box-shadow:
+    inset 2px 2px 5px #e4ffa6,
+    inset -2px -2px 5px #b0e84d;
+}
+
+.cell {
+  border: 1px solid #333;
+  display: inline-block;
+  display: flex;
+  text-align: center;
+  border-radius: 8px;
+  background: linear-gradient(145deg, #292929, #1c1c1c);
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  line-height: 50px;  /* 기본 line-height 값 */
+  color: #ddd;
+  box-shadow:
+    inset 2px 2px 5px #3a3a3a,
+    inset -2px -2px 5px #1a1a1a;
+  user-select: none;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 채워진 블록 */
+.filled {
+  border-color: #83ffc9aa;
+  background: linear-gradient(145deg, #b4ff05aa, #1f06ffaa);
+  color: #83ffc9aa;
+  box-shadow:
+    0 0 10px 2px #83ffc9aa,
+    inset 2px 2px 6px #b4ff05aa,
+    inset -2px -2px 6px #1f06ffaa;
+}
+
+
+/* 현재 움직이는 블록 */
+.active {
+  border-color: #ffffff;
+  background: linear-gradient(145deg, #ffffffcc, #b2d4e1cc);
+  color: #003d59;
+  font-weight: 700;
+  box-shadow:
+    0 0 12px 3px #ffffff,
+    inset 1px 1px 5px #ffffff,
+    inset -1px -1px 5px #ffffff;
+  text-shadow: 0 0 5px #ffffff;
+}
+
+/* 깜빡임 애니메이션 */
+@keyframes blink {
+  0%, 50%, 100% {
+    background-color: #f00909;
+    box-shadow:
+      0 0 15px 5px #f00909,
+      inset 2px 2px 8px #f00909,
+      inset -2px -2px 8px #f00909;
+  }
+  25%, 75% {
+    background-color: #e95050;
+    box-shadow: none;
+  }
+}
+
+.blink {
+  animation: blink 0.1s ease-in-out 3;
+}
+
+
+#next-block-0, #next-block-1, #next-block-2 {
+  font-size: 36px;
+  margin: 0 5px;
+  color: #ffd633;
+  text-shadow: 0 0 6px #ffcc00;
+  user-select: none;
+}
+
+
+@media screen and (max-width : 900px) {
+  #container {
+    position: fixed;
+    left:70px;
+    top:70px;
+  }
+  #next-blocks {
+    position: fixed;
+    left:10px;
+    top:20px;
+    margin-top:50px;
+    width: 10px; margin-right: 50px; font-size: 32px; 
+    line-height: 1.5; text-align: center; 
+    user-select:none;
+  }
+  
+  #game {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    aspect-ratio: 6 / 10; /* 비율도 함께 변경 */
+  }
+}

@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  cursor: default;
+}
+
+.message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 48px;
+  padding: 40px 60px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 10;
+  font-family: 'Arial', sans-serif;
+}
+
+.stage-info {
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 20px;
+  z-index: 10;
+  font-family: Arial, sans-serif;
+}
+
+/* 터치 시 화면 확대 방지 */
+html, body {
+  touch-action: none; /* 터치 기본 동작 전부 차단 */
+  -ms-touch-action: none; /* IE 호환 */
+  -webkit-user-select: none; /* 텍스트 선택 방지 (iOS) */
+  user-select: none; /* 텍스트 선택 방지 */
+}
+
+/* iOS에서 흔히 발생하는 '탭 후 확대' 방지 */
+meta[name="viewport"] {
+  content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+}
+
+/* cursor 개선: 모바일에선 손가락 아이콘으로 */
+canvas {
+  cursor: pointer;
+  touch-action: none; /* 캔버스 내 터치 스크롤, 확대 방지 */
+}
+
+/* 선택 방지 (드래그 시 텍스트 선택 막기) */
+body, canvas {
+  -webkit-touch-callout: none; /* iOS에서 텍스트 선택 메뉴 방지 */
+  -webkit-user-drag: none; /* iOS에서 이미지 드래그 방지 */
+}
+
+/* 추가로 모바일에서 자주 쓰는 스타일 */
+body {
+  overscroll-behavior: none; /* iOS 및 일부 브라우저에서 터치 스크롤 탄력 효과 방지 */
+}

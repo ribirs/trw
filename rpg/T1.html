@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>RPG 인터페이스</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+    }
+
+    #menu-bar {
+      display: flex;
+      background-color: #333;
+      border-bottom: 1px solid #555;
+    }
+
+    .menu-button {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #333;
+      border: none;
+      color: white;
+      font-size: 16px;
+    }
+
+    .menu-button:hover {
+      background-color: #444;
+    }
+
+    #main-container {
+      display: flex;
+    }
+
+    #stat-window {
+      width: 320px;
+      background-color: #222;
+      padding: 20px;
+      box-sizing: border-box;
+      height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+
+    .content-panel {
+      display: none;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .visible {
+      display: block !important;
+    }
+
+    .stat-item {
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .stat-buttons button {
+      font-size: 12px;
+      padding: 2px 6px;
+      cursor: pointer;
+    }
+
+    #toggle-details {
+      margin-top: 15px;
+      width: 100%;
+      padding: 6px;
+      background: #444;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #gold-display {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+      border-top: 1px solid #555;
+      padding-top: 8px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* 마을, 던전 UI */
+    .town-button, .dungeon-button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      background-color: #444;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    #floor-select {
+      width: 100%;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 메뉴 바 -->
+  <div id="menu-bar">
+    <button class="menu-button" onclick="showPanel('stat')">🧍 스탯창</button>
+    <button class="menu-button" onclick="showPanel('town')">🏘️ 마을</button>
+    <button class="menu-button" onclick="showPanel('dungeon')">🏰 던전</button>
+  </div>
+
+  <!-- 메인 UI -->
+  <div id="main-container">
+    <!-- 왼쪽 스탯창 -->
+    <div id="stat-window" class="content-panel visible">
+      <h2>스탯 창</h2>
+
+      <div id="base-stats">
+        <div class="stat-item">Lv: <span id="lv">1</span></div>
+        <div class="stat-item">Exp: <span id="exp">0</span> / <span id="expNeeded">20</span></div>
+        <div class="stat-item">HP: <span id="hp">20</span></div>
+        <div class="stat-item">MP: <span id="mp">5</span></div>
+        <div class="stat-item">StatPoint: <span id="statPoint">2</span></div>
+        <hr>
+        <div id="custom-stats"></div>
+      </div>
+
+      <div id="detailed-stats" class="hidden">
+        <h3>상세 스탯</h3>
+        <div class="stat-item">물리 데미지: <span id="physicalDamage">0</span></div>
+        <div class="stat-item">마법 데미지: <span id="magicDamage">0</span></div>
+        <div class="stat-item">명중률: <span id="accuracy">0%</span></div>
+        <div class="stat-item">회피율: <span id="evasion">0%</span></div>
+        <div class="stat-item">물리 크리티컬 확률: <span id="critRate">0%</span></div>
+        <div class="stat-item">마법 크리티컬 확률: <span id="magicCritRate">0%</span></div>
+        <div class="stat-item">물리 크리티컬 데미지: <span id="critDamage">0%</span></div>
+        <div class="stat-item">마법 크리티컬 데미지: <span id="magicCritDamage">0%</span></div>
+      </div>
+
+      <button id="toggle-details" onclick="toggleDetails()">상세 스탯 보기</button>
+      <div id="gold-display">Gold: <span id="gold">100</span> G</div>
+    </div>
+
+    <!-- 마을 화면 -->
+    <div id="town-panel" class="content-panel">
+      <h2>🏘️ 마을</h2>
+      <button class="town-button" onclick="openItemShop()">아이템 구매</button>
+      <button class="town-button" onclick="openSellShop()">아이템 판매</button>
+      <button class="town-button" onclick="useInn()">여관</button>
+    </div>
+
+    <!-- 던전 화면 -->
+    <div id="dungeon-panel" class="content-panel">
+      <h2>🏰 던전 입장</h2>
+      <label for="floor-select">입장할 층 선택:</label>
+      <input type="range" id="floor-select" min="1" max="1" value="1">
+      <div>선택한 층: <span id="floor-display">1</span>층</div>
+      <button class="dungeon-button">입장</button>
+    </div>
+  </div>
+
+  <script>
+    const stats = {
+      lv: 1,
+      exp: 0,
+      hp: 20,
+      mp: 5,
+      statPoint: 2,
+      gold: 100,
+      str: 0,
+      dex: 0,
+      int: 0,
+      luk: 0,
+      con: 0,
+      men: 0
+    };
+
+    const displayStats = ["str", "dex", "int", "luk", "con", "men"];
+
+    function getExpNeededForLevel(level) {
+      const baseExp = 20;
+      return Math.floor(baseExp * Math.pow(level, 1.25));
+    }
+
+    function calculateDerivedStats() {
+      const derived = {
+        physicalDamage: 3 + stats.str,
+        magicDamage: stats.int * 2,
+        accuracy: (60 + stats.dex * 0.25).toFixed(2),
+        evasion: (10 + stats.dex * 0.25).toFixed(2),
+        critRate: (10 + stats.luk * 0.5).toFixed(2),
+        magicCritRate: 0.00,
+        critDamage: 0.00,
+        magicCritDamage: 0.00,
+        maxHp: 20 + stats.str * 2 + stats.con * 10,
+        maxMp: 5 + stats.int * 2 + stats.men * 5
+      };
+
+      stats.hp = derived.maxHp;
+      stats.mp = derived.maxMp;
+
+      document.getElementById('physicalDamage').textContent = derived.physicalDamage;
+      document.getElementById('magicDamage').textContent = derived.magicDamage;
+      document.getElementById('accuracy').textContent = derived.accuracy + '%';
+      document.getElementById('evasion').textContent = derived.evasion + '%';
+      document.getElementById('critRate').textContent = derived.critRate + '%';
+      document.getElementById('magicCritRate').textContent = derived.magicCritRate + '%';
+      document.getElementById('critDamage').textContent = derived.critDamage + '%';
+      document.getElementById('magicCritDamage').textContent = derived.magicCritDamage + '%';
+    }
+
+    function updateStatWindow() {
+      for (let key in stats) {
+        const el = document.getElementById(key);
+        if (el) el.textContent = stats[key];
+      }
+
+      document.getElementById('expNeeded').textContent = getExpNeededForLevel(stats.lv);
+      document.getElementById('gold').textContent = stats.gold;
+      calculateDerivedStats();
+    }
+
+    function createStatControls() {
+      const container = document.getElementById('custom-stats');
+      container.innerHTML = '';
+
+      displayStats.forEach(stat => {
+        const div = document.createElement('div');
+        div.className = 'stat-item';
+
+        const label = document.createElement('span');
+        label.textContent = stat.toUpperCase() + ':';
+
+        const value = document.createElement('span');
+        value.id = stat;
+        value.textContent = stats[stat];
+
+        const buttons = document.createElement('div');
+        buttons.className = 'stat-buttons';
+
+        const btn1 = document.createElement('button');
+        btn1.textContent = '+1';
+        btn1.onclick = () => addPoint(stat, 1);
+
+        const btnAll = document.createElement('button');
+        btnAll.textContent = 'All';
+        btnAll.onclick = () => addPoint(stat, 'all');
+
+        buttons.appendChild(btn1);
+        buttons.appendChild(btnAll);
+
+        div.appendChild(label);
+        div.appendChild(value);
+        div.appendChild(buttons);
+
+        container.appendChild(div);
+      });
+    }
+
+    function addPoint(stat, amount) {
+      if (stats.statPoint <= 0) return;
+
+      if (amount === 'all') {
+        stats[stat] += stats.statPoint;
+        stats.statPoint = 0;
+      } else if (amount === 1 && stats.statPoint >= 1) {
+        stats[stat] += 1;
+        stats.statPoint -= 1;
+      }
+
+      updateStatWindow();
+    }
+
+    function toggleDetails() {
+      const baseStats = document.getElementById('base-stats');
+      const detailedStats = document.getElementById('detailed-stats');
+      const button = document.getElementById('toggle-details');
+
+      const isDetailsVisible = !detailedStats.classList.contains('hidden');
+
+      if (isDetailsVisible) {
+        baseStats.classList.remove('hidden');
+        detailedStats.classList.add('hidden');
+        button.textContent = '상세 스탯 보기';
+      } else {
+        baseStats.classList.add('hidden');
+        detailedStats.classList.remove('hidden');
+        button.textContent = '기본 스탯 보기';
+      }
+    }
+
+    function showPanel(panel) {
+      document.getElementById('stat-window').classList.remove('visible');
+      document.getElementById('town-panel').classList.remove('visible');
+      document.getElementById('dungeon-panel').classList.remove('visible');
+
+      if (panel === 'stat') {
+        document.getElementById('stat-window').classList.add('visible');
+      } else if (panel === 'town') {
+        document.getElementById('town-panel').classList.add('visible');
+      } else if (panel === 'dungeon') {
+        document.getElementById('dungeon-panel').classList.add('visible');
+      }
+    }
+    
+    function useInn() {
+      const cost = stats.lv * 100;
+      if (stats.gold < cost) {
+        alert(`여관을 이용하려면 ${cost} 골드가 필요합니다.`);
+        return;
+      }
+
+      stats.gold -= cost;
+
+      // 최대 HP/MP 재계산 후 회복
+      stats.hp = 20 + stats.str * 2 + stats.con * 10;
+      stats.mp = 5 + stats.int * 2 + stats.men * 5;
+
+      alert(`여관에서 휴식했습니다. ${cost} G 소모. HP/MP가 모두 회복되었습니다.`);
+      updateStatWindow();
+    }
+
+    // 아이템 구매/판매는 아직 구현 안 됐으므로 빈 함수
+    function openItemShop() {
+      alert("아이템 구매 상점은 아직 구현되지 않았습니다.");
+    }
+
+    function openSellShop() {
+      alert("아이템 판매 상점은 아직 구현되지 않았습니다.");
+    }
+
+    // 던전 층 스크롤
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('floor-select').addEventListener('input', function () {
+        document.getElementById('floor-display').textContent = this.value;
+      });
+
+      createStatControls();
+      updateStatWindow();
+    });
+  </script>
+
+</body>
+</html>

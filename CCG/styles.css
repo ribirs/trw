@@ -1,0 +1,1140 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.hidden {
+  display: none;
+}
+#background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  z-index: -1; /* 뒤로 보내기 */
+}
+
+#content {
+  position: relative;
+  z-index: 1; /* 내용이 배경 위에 보이게 */
+}
+
+
+body {
+  font-family: sans-serif;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  /* touch-action: none; 터치 이동 차단 */
+}
+#top-bar {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 (필요 없으면 center 또는 space-between 등으로 변경 가능) */
+  gap: 10px; /* 두 div 사이 간격 */
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#gold-display {
+  font-weight: bold;
+  padding: 0 5px;
+  font-size: 24px;
+  color: gold;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 5px;
+}
+
+#Dia-display {
+  font-weight: bold;
+  padding: 0 5px;
+  font-size: 24px;
+  color: skyblue;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 5px;
+}
+
+#pp-display {
+  font-weight: bold;
+  padding: 0 5px;
+  font-size: 24px;
+  color: lime;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 5px;
+}
+
+
+#game-container {
+  margin-top:40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 20vh; /* 로그창 높이만큼 위로 띄우기 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+
+#log-container {
+  height: 20vh; /* 화면 높이의 20% */
+  background-color: #111;
+  color: white;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 8px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 2px solid #333;
+  z-index: 500;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+.card {
+  position: relative; /* 자식 요소의 위치 기준 */
+  /* width: 45%; */
+  /* max-width: 200px; */
+  /* aspect-ratio: 3 / 4; */
+  
+  height: calc((80vh - 40px) / 2.4); /* 기준 height 설정 */
+  width: calc(((80vh - 40px) / 2.4) * 0.75); /* 3:4 비율의 width */
+
+  background-color: white; /* fallback */
+  border: 6px solid #333;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px;
+  box-shadow: 3px 3px 5px rgba(0,0,0,0.6);
+
+  /* 배경 이미지 관련 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* 텍스트 가독성을 위한 색상 기본값 */
+  color: white;
+  overflow: hidden;
+}
+
+/* (선택사항) 어두운 반투명 오버레이: 배경 위에 살짝 덮는 레이어 */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* background: rgba(0, 0, 0, 0.4); 어두운 오버레이 */
+
+  z-index: 1;
+}
+
+/* 카드 내부 요소는 배경보다 위로 */
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+.card h4 {
+  text-align: center;
+  font-size: 0.83rem;
+}
+
+
+.stats {
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.card-stats .emoji {
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+
+/* 색상 구분 */
+.enemy .card {
+  z-index: 100;
+  background-color: red!important;
+}
+
+.player .card {
+  z-index: 200;
+  background-color: green!important;
+}
+.card-stats {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  font-weight: bold;
+  gap: 4px;
+  margin-top: auto;
+  font-family: 'Roboto Mono', monospace; /* 또는 'Courier New' */
+}
+.crd {
+  background-color: rgba(0, 0, 0,0.5);
+}
+/* 등급에 따른 테두리 색상 */
+.card.common     { border-color: #d2d2d2;}  /* 노멀 - 흰색 */
+.card.uncommon     { border-color: #a0ffa0;}  /* 언커먼 - 연두색 */
+.card.magic      { border-color: #7ecbff; }  /* 매직 - 하늘색 */
+.card.rare       { border-color: #b57eff; 
+    animation: glow 1s infinite alternate;
+}  /* 레어 - 보라색 */
+.card.heroic       { border-color: #ff8d7e; 
+    background: linear-gradient(135deg, #ff8d7e 0%, #ffffff 100%);
+    animation: heroic-glow 1s infinite alternate;
+}  /* 히어로 - 주황색 */
+.card.unique     { border-color: #ff9ce3; 
+    background: linear-gradient(135deg, #ff9ce3 0%, #ffffff 100%);
+    animation: unique-glow 1s infinite alternate;
+}  /* 유니크 - 핑크색 */
+.card.epic       { border-color: #ffb347; 
+    background: linear-gradient(135deg, #ffb347 0%, #ffffff 100%);
+    animation: epic-glow 1s infinite alternate;
+}  /* 에픽 - 주황색 */
+.card.legendary  { border-color: #ff4c4c; 
+    background: linear-gradient(135deg, #ff4c4c 0%, #ffffff 100%);
+    animation: legend-glow 1s infinite alternate;
+}  /* 레전더리 - 빨간색 */
+.card.myth       { border-color: #f8e800; 
+    background: linear-gradient(135deg, #f8e800 0%, #ffffff 100%);
+    animation: myth-glow 1s infinite alternate;
+}  /* 신화 - 청록색 */
+.card.transcendent { border-color: #20e0d0; 
+    background: linear-gradient(135deg, #20e0d0 0%, #ffffff 100%);
+    animation: tran-glow 1s infinite alternate;
+}  /* 절대 - 노란색 */
+
+@keyframes glow {
+  from { box-shadow: 0 0 0 #000000; }
+  to { box-shadow: 0 0 25px #ffffff; }
+}
+@keyframes heroic-glow {
+  from { box-shadow: 0 0 0 #ff8d7e; }
+  to { box-shadow: 0 0 25px #ff8d7e; }
+}
+@keyframes unique-glow {
+  from { box-shadow: 0 0 0 #ff9ce3; }
+  to { box-shadow: 0 0 30px #ff9ce3; }
+}
+@keyframes epic-glow {
+  from { box-shadow: 0 0 0 #ffb347; }
+  to { box-shadow: 0 0 35px #ffb347; }
+}
+@keyframes legend-glow {
+  from { box-shadow: 0 0 0 #ff4c4c; }
+  to { box-shadow: 0 0 40px #ff4c4c; }
+}
+@keyframes myth-glow {
+  from { box-shadow: 0 0 0 #f8e800; }
+  to { box-shadow: 0 0 45px #f8e800; }
+}
+@keyframes tran-glow {
+  from { box-shadow: 0 0 0 #20e0d0; }
+  to { box-shadow: 0 0 50px #20e0d0; }
+}
+
+.card-tier {
+  position: absolute;
+  top: 25px;
+  right: 0px;
+  width: 65px;
+  height: 65px;
+  color: #ff3737;
+  padding: 5px;
+  border-radius: 7px;
+}
+.card-lv {
+  position: absolute;
+  top: 30px;
+  left: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fbf59e;
+  background-color: rgba(0, 0, 0,0.6);
+  padding: 5px;
+  border-radius: 7px;
+}
+.card-xp {
+  position: absolute;
+  top: 60px;
+  left: 4px;
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #ffbfc8;
+  background-color: rgba(0, 0, 0,0.6);
+  padding: 5px;
+  border-radius: 7px;
+}
+
+.menu-button {
+  font-size: 28px;
+  cursor: pointer;
+  user-select: none;
+  color: white;
+  display: inline-block;
+  z-index: 100;
+  position: fixed;
+  transition: all 0.3s ease;
+}
+.menu-button:before {
+  background-color: black;
+  padding:3px 6px;
+  border-radius: 7px;
+  font-weight: bold;
+}
+.menu-button:hover {
+  transform: scale(1.25) translateX(10px);
+}
+
+#QuestBtn {left: 10px; top: 40px;}
+#QuestBtn:before {content:"퀘스트";font-size: 1rem; color:gold;}
+#inventoryBtn {left: 10px; top: 80px;}
+#inventoryBtn:before {content:"카드";font-size: 1rem; color:gold;}
+#shopBtn {left: 10px; top: 120px;}
+#shopBtn:before {content:"상점";font-size: 1rem; color:gold;}
+#UpgradeBtn {left: 10px; top: 160px;}
+#UpgradeBtn:before {content:"업글";font-size: 1rem; color:gold;}
+#EnemyUp {left: 10px; top: 200px;}
+#EnemyUp:before {content:"강한";font-size: 1rem;}
+#EnemyDw {left: 10px; top: 240px;}
+#EnemyDw:before {content:"약한";font-size: 1rem;}
+#healBtn {left: 10px; top: 280px;}
+#healBtn:before {content:"회복";font-size: 1rem;}
+#healPer {position: fixed;
+  left: 10px; top: 320px; font-size: 1rem; 
+  color:lightcoral; font-weight: bold;
+  background-color: black;
+  padding:4px 7px;
+  border-radius: 8px;
+  height:27px;
+  line-height: 22px;
+}
+#OptionBtn {left: 10px; top: 360px;}
+#OptionBtn:before {content:"옵션";font-size: 1rem; color:gold;}
+#GuideBtn {left: 10px; top: 400px;}
+#GuideBtn:before {content:"가이드";font-size: 1rem; color:gold;}
+
+#UpdateBtn {left: 10px; top: 440px;}
+#UpdateBtn:before {content:"업뎃 내역";font-size: 1rem;}
+
+.inventory-panel, .shop-panel, .Up-panel, .Quest-panel, .Option-panel, .Guide-panel {
+  position: fixed;
+  top: 40px;
+  right: -300px; /* 숨겨진 상태: width만큼 바깥으로 */
+  width: 300px;
+  height: calc(80vh - 40px); /* 로그창 높이 제외 */
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* 그림자도 반대로 */
+  transition: right 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+
+.inventory-panel.open, .shop-panel.open, .Up-panel.open, .Quest-panel.open, .Option-panel.open, .Guide-panel.open {
+  right: 0px;
+}
+
+.inventory-header, .shop-header, .Up-header, .Quest-header, .Option-header, .Guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#inventoryList, #shopButtons, #UpButtons, #UpButtons2, #QuestButtons, #OptionButtons {
+  margin-top: 20px;
+  font-size: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* 카드 간 간격 */
+}
+.inventory-item {
+  margin-bottom: 15px;
+  /* 배경 이미지 관련 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+.fusion-btn,.fusion2-btn, .InCard-btn, .Sell-btn, .Sell-btn2, .break-btn, .split-btn {
+  margin: 2px;
+  padding: 2px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+}
+.fusion-btn {
+  background-color: rgba(154, 205, 50,0.9);
+}
+.fusion2-btn {
+  background-color: rgba(127, 255, 212,0.9);
+}
+.InCard-btn {
+  background-color: rgba(0, 255, 255,0.9);
+  border:3px solid blue;
+  padding:5px;
+}
+.Sell-btn {
+  background-color: rgba(204, 75, 141, 0.95);
+}
+.Sell-btn2 {
+  background-color: rgba(204, 75, 193, 0.95);
+}
+.break-btn {
+  background-color: rgba(0, 0, 0, 0.95);
+  border:1px solid white;
+  padding: 3px 6px;
+  color:white;
+}
+.split-btn {
+  background-color: rgba(255, 255, 255, 0.95);
+  border:1px solid black;
+  padding: 3px 6px;
+  color:black
+}
+
+#shopButtons, #UpButtons, #UpButtons2, #QuestButtons, #OptionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 버튼 간격 */
+}
+
+#shopButtons button, #UpButtons button, #UpButtons2 button, #QuestButtons button, #OptionButtons button {
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%;
+  text-align: center;
+}
+.ResetBtn, .PrestigeBtn {
+  background-color: #ff82de;
+  color: rgb(0, 64, 255);
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+  padding: 12px 0;
+  font-size: 24px;
+  cursor: pointer;
+  margin: 10px 0 10px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%;
+  text-align: center;
+}
+#QuestButtons button {
+  font-size: 14px;
+}
+
+#shopButtons button:hover,#UpButtons button:hover,#UpButtons2 button:hover,
+#QuestButtons button:hover,#OptionButtons button:hover {
+  background-color: #666;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+#shopButtons button:active, #UpButtons button:active, #UpButtons2 button:active, 
+#QuestButtons button:active, #OptionButtons button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+/* 공격 애니메이션 */
+.card.attack-animation1 {
+  animation: shake1 0.5s ease forwards;
+}
+.card.attack-animation2 {
+  animation: shake2 0.5s ease forwards;
+}
+@keyframes shake1 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+  20% {
+    transform: translateY(120px) translateX(15px) rotate(15deg) scale(1.15);
+    filter: brightness(1.5);
+  }
+  40% {
+    transform: translateY(180px) translateX(0) rotate(-15deg) scale(1.1);
+    filter: brightness(2);
+  }
+  60% {
+    transform: translateY(160px) translateX(10px) rotate(10deg) scale(1.12);
+    filter: brightness(1);
+  }
+  80% {
+    transform: translateY(30px) translateX(5px) rotate(5deg) scale(1.05);
+    filter: brightness(0.5);
+  }
+  100% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes shake2 {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+  20% {
+    transform: translateY(-120px) translateX(-15px) rotate(-15deg) scale(1.15);
+    filter: brightness(1.5);
+  }
+  40% {
+    transform: translateY(-180px) translateX(0) rotate(15deg) scale(1.1);
+    filter: brightness(2);
+  }
+  60% {
+    transform: translateY(-160px) translateX(-10px) rotate(-10deg) scale(1.12);
+    filter: brightness(1);
+  }
+  80% {
+    transform: translateY(-30px) translateX(-5px) rotate(-5deg) scale(1.05);
+    filter: brightness(0.5);
+  }
+  100% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+}
+
+
+.card-stats .hp-bar-container {
+  width: 100%;
+  height: 8px;
+  background-color: #ddd;
+  border-radius: 4px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.card-stats .hp-bar {
+  height: 100%;
+  background-color: #ff0000; /* 녹색 */
+  transition: width 0.3s ease;
+}
+#AutoBuy {
+  position: fixed;
+  left: 90px;
+  top: 10px;
+  height:25px;
+  line-height: 15px;
+  color:gray;
+  background-color: white;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer; /* 클릭 가능한 느낌 */
+  transition: 0.2s;
+}
+#AutoBuy.Active {
+  color:red;
+  background-color: darkblue;
+}
+
+#Roll {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  height:25px;
+  line-height: 15px;
+  color:gray;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 15px;
+  cursor: pointer; /* 클릭 가능한 느낌 */
+  transition: 0.2s;
+}
+#Roll.one {
+  color:red;
+}
+#Roll.two {
+  color:goldenrod;
+}
+#Roll.three {
+  color:green;
+}
+#Roll.four {
+  color:blue;
+}
+#Roll.five {
+  color:plum;
+}
+#Roll.six {
+  color:black;
+}
+
+#AtkBtn {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  padding: 10px 20px;
+  width: 110px;
+  z-index: 998;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  color: black;
+  background: linear-gradient(135deg, #ff004f, #ff7700);
+  border: 2px solid transparent;
+  /* border-image: linear-gradient(135deg, #ff004f, #ff7700) 1; */
+  box-shadow: 0 0 20px rgba(255, 0, 80, 0.6), 0 0 40px rgba(255, 119, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  line-height: 15px;
+  text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.6);
+}
+
+#AtkBtn:hover {
+  box-shadow: 0 0 30px rgba(255, 0, 80, 0.8), 0 0 60px rgba(255, 119, 0, 0.6);
+  transform: scale(1.25);
+  background: linear-gradient(135deg, #ff5500, #ffcc00);
+  /* border-image: linear-gradient(135deg, #ff5500, #ffcc00) 1; */
+}
+#AutoBtn {
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  padding: 12px 12px;
+  width: 130px;
+  z-index: 998;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  color: black;
+  background: linear-gradient(135deg, #007bff, #00cfff);
+  border: 2px solid transparent;
+  /* border-image: linear-gradient(135deg, #007bff, #00cfff) 1; */
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.6), 0 0 40px rgba(0, 207, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.6);
+}
+
+#AutoBtn:hover {
+  box-shadow: 0 0 30px rgba(0, 123, 255, 0.8), 0 0 60px rgba(0, 207, 255, 0.6);
+  transform: scale(1.25);
+  background: linear-gradient(135deg, #005bbb, #00bfff);
+  /* border-image: linear-gradient(135deg, #005bbb, #00bfff) 1; */
+}
+
+/* 
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 0, 80, 0.6), 0 0 40px rgba(255, 119, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 0, 80, 0.8), 0 0 60px rgba(255, 119, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 0, 80, 0.6), 0 0 40px rgba(255, 119, 0, 0.5);
+  }
+} */
+
+#popupMsg {
+  display:none; position: fixed; top: 70%; left: 50%; 
+  transform: translate(-50%, -50%);
+  background-color: rgba(128,128,128,0.75); 
+  padding: 10px 20px; 
+  border-radius: 15px; text-align: center; 
+  font-weight: bold; font-size: 1rem; 
+  z-index: 9999; color: gold;
+}
+
+/* 배경 오버레이 */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(100, 100, 100, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* 업데이트 내역 */
+
+.popup-box {
+  background-color: #ffffff;
+  width: 80%;
+  height: 80%;
+  padding: 30px;
+  border-radius: 12px;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* 닫기 버튼 */
+.popup-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s ease;
+}
+.popup-close:hover {
+  color: #333;
+}
+
+/* 제목 */
+.popup-box h2 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #222;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+/* 버전 정보 */
+.popup-box p {
+  font-size: 12px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.popup-box span {
+  font-weight: bold;
+  color: #007acc;
+}
+
+/* 업데이트 내역 컨테이너 */
+.update-log {
+  margin-top: 20px;
+}
+
+/* 리스트 스타일 개선 */
+.update-log ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.update-log ul li {
+  background: #f8f9fa;
+  border-left: 4px solid darkcyan;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+.update-log li:hover {
+  background: #eef4fa;
+}
+
+
+/* 오버레이: 배경 블러와 부드러운 반투명 효과 */
+.card-confirm-overlay, .Prestige-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background-color: rgba(30, 30, 30, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+}
+
+/* 컨펌 박스: 카드 느낌 강조 + 고급스러운 그림자 */
+.card-confirm-box, .Prestige-confirm-box {
+  background: linear-gradient(145deg, #b4f7b1, #a9b6e4);
+  border-radius: 16px;
+  padding: 40px 30px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  border: 2px solid gold;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeInScale 0.3s ease-out;
+}
+
+/* 텍스트: 강조는 하되 과하지 않게 */
+.card-confirm-text, .Prestige-confirm-text {
+  font-size: 20px;
+  color: black;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* 버튼: 눌렀을 때 반응 + 밝은 강조 효과 */
+.card-confirm-buttons button,.Prestige-confirm-buttons button  {
+  margin: 0 12px;
+  padding: 12px 28px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4e9af1, #1c70d1);
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-confirm-buttons button:hover, .Prestige-confirm-buttons button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #63aaff, #2c7be5);
+}
+
+.card-confirm-buttons button:active, .Prestige-confirm-buttons button:active {
+  transform: scale(0.95);
+}
+
+/* 애니메이션 */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+.CloseBtn {
+  padding: 2px 5px;
+  font-size: 12px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #00c853, #64dd17); /* 진한 녹색 → 밝은 연두색 */
+  border: 2px solid transparent;
+  box-shadow: 0 0 20px rgba(0, 200, 83, 0.6), 0 0 40px rgba(100, 221, 23, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.6);
+}
+
+.CloseBtn:hover {
+  box-shadow: 0 0 30px rgba(0, 230, 118, 0.8), 0 0 60px rgba(174, 255, 0, 0.6);
+  transform: scale(1.5);
+  background: linear-gradient(135deg, #00e676, #aeea00); /* 밝은 초록 → 연한 라임 */
+}
+
+#StoneList, #KillList, #MaxList  {
+  color:white;
+  padding: 5px;
+  font-size: 0.8rem;
+}
+
+.Option-list {
+  padding: 10px;
+}
+.Option-item {
+  display: block;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+#OptionButtons button.Active {
+  color:black;
+  background-color: pink;
+}
+
+
+.Guide-content {
+  margin-top: 20px;
+}
+
+.guide-item {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: gray;
+  border-left: 4px solid #00fff2;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  border-radius: 4px;
+}
+
+.guide-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #00fff2;
+  cursor: pointer;
+  user-select: none;
+}
+.guide-description {
+  display: none;
+}
+.guide-description p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1; /* 적당한 줄간격 */
+  color: white;
+  white-space: pre-line; /* 줄바꿈 문자(\n)와 <br> 모두 처리 가능 */
+  word-wrap: break-word; /* 긴 단어 줄바꿈 허용 */
+}
+
+.toggle-icon {
+  margin-left: 8px;
+  font-size: 0.9em;
+}
+
+/* 카드 등장 애니메이션 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content {
+  background: rgba(0,0,0,0.05);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 80%;
+  overflow: auto;
+  position: relative;
+  animation: fadeIn 0.5s ease;
+}
+
+#cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+/* 공통 애니메이션 */
+.card-anim {
+  width: 120px;
+  height: 160px;
+  background-size: cover;
+  background-position: center 25px;
+  background-repeat: no-repeat;
+  border: 2px solid white;
+  border-radius: 8px;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: popIn 0.4s ease forwards;
+}
+
+/* 희귀도 색상 및 효과 */
+.rarity-4 {
+  box-shadow: 0 0 40px 16px red;
+  border-color: red;
+  animation: popIn 0.4s ease forwards, glows 1.2s infinite alternate;
+}
+
+.rarity-3 {
+  box-shadow: 0 0 30px 12px purple;
+  border-color: purple;
+  animation: popIn 0.4s ease forwards, glows 1s infinite alternate;
+}
+
+.rarity-2 {
+  box-shadow: 0 0 20px 8px cyan;
+  border-color: cyan;
+}
+
+.rarity-1 {
+  box-shadow: 0 0 12px 4px lightblue;
+  border-color: lightblue;
+}
+
+@keyframes glows {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.8);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.card-title2 {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: white;
+  text-shadow: 1px 1px 3px black;
+  background-color: rgba(0, 255, 34, 0.3);
+  padding: 2px 4px;
+}
+
+#closePopup {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  background-color: rgba(255, 50, 50, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  z-index: 1000;
+}
+
+#closePopup:hover {
+  transform: scale(1.5);
+}
+
+#closePopup:active {
+  transform: scale(0.95);
+}
+
+#save-slot-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'MedievalSharp', serif;
+  font-weight: bold;
+}
+
+#save-slot-popup {
+  background: linear-gradient(to bottom right, #f9f1d6, #d1ba79); /* 양피지 느낌 색상 */
+  color: #3e2f1c;
+  padding: 30px;
+  border: 6px solid #8b6f3d;
+  border-radius: 15px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+#save-slot-popup h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #5c4327;
+  text-shadow: 1px 1px #f4e5c0;
+}
+
+#save-slots-container > .slot-box {
+  border: 2px solid #5b4127;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  background-color: rgba(255, 248, 230, 0.95); /* 연한 양피지 색 */
+  transition: transform 0.2s;
+  position: relative;
+}
+
+#save-slots-container > .slot-box:hover {
+  transform: scale(1.02);
+  background-color: rgba(255, 240, 200, 0.95);
+  cursor: pointer;
+}
+
+.slot-box .slot-delete {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background-color: #922;
+  color: white;
+  border: none;
+  padding: 3px 7px;
+  font-size: 14px;
+  border-radius: 5px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.slot-box .slot-delete:hover {
+  background-color: #c33;
+}
+
+#save-slots-container > div {
+  border: 1px solid #aaa;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  transition: background-color 0.2s;
+}
+
+#save-slots-container > div:hover {
+  background-color: #e0f0ff;
+}

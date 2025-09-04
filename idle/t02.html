@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>방치형Idle게임 v0.4</title>
+<link rel="stylesheet" href="css/idle.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+  <canvas id="gameCanvas"></canvas>
+  <div id="menu">
+    <div class="menu-row">
+      <div class="menu-item"><img src="img/icon/Gold.webp" alt="골드" class="resource-icon"><span id="Gold">0</span></div>
+      <div class="menu-item"><img src="img/icon/Gem.webp" alt="보석" class="resource-icon"><span id="Gem">0</span></div>
+      <div class="menu-item"><img src="img/icon/Resto.webp" alt="정화력" class="resource-icon"><span id="Rest">0</span></div>
+    </div>
+  
+    <div class="menu-row">
+      <div class="menu-item"><img src="img/icon/Tree.webp" alt="목재" class="resource-icon"><span id="Tree">0</span></div>
+      <div class="menu-item"><img src="img/icon/Food.webp" alt="식량" class="resource-icon"><span id="Food">0</span></div>
+      <div class="menu-item"><img src="img/icon/Rock.webp" alt="석재" class="resource-icon"><span id="Rock">0</span></div>
+    </div>
+    
+    <div class="menu-row">
+      <div class="menu-item"><img src="img/icon/Steel.webp" alt="강철" class="resource-icon"><span id="Steel">0</span></div>
+      <div class="menu-item"><img src="img/icon/Chip.webp" alt="반도체" class="resource-icon"><span id="Chip">0</span></div>
+      <div class="menu-item"><img src="img/icon/Oil.webp" alt="석유" class="resource-icon"><span id="Oil">0</span></div>
+    </div>
+
+    <div class="menu-row">
+      <div class="menu-item"><img src="img/icon/Uranium.webp" alt="우라늄" class="resource-icon"><span id="Uranium">0</span></div>
+      <div class="menu-item"><img src="img/icon/Energy.webp" alt="전력" class="resource-icon"><span id="Energy">0</span></div>
+      <div class="menu-item"><img src="img/icon/Dark.webp" alt="오염도" class="resource-icon"><span id="Dark">0</span></div>
+    </div>
+  </div>
+  
+  <div id="progress-container"><div id="progress-bar"></div></div>
+  <div id="Give-message" class="give-message"></div>
+  <div id="bottom-menu">
+    <div id="ClickButton" style="display: none; margin-top: 2px; font-size:0.8rem;">
+    </div>
+    <div>
+      <span id="bottom-coords">( 0 , 0 )</span> - 
+      <span id="bottom-value">정보 없음</span>
+    </div>
+  </div>
+  <div id="warning-message" class="warning-message"></div>
+  <button id="ToggleBtn">🔄<span id="ToggleValue" style="color: red;">Basic</span></button>
+<button id="UpgradeBtn">⏫</button>
+<div id="UpgradeWin">
+  <button class="upgbtn" id="Upgrade10"><img src="img/Town.webp" alt="도시" class="resource-icon">도시의 <img src="img/icon/Gold.webp" alt="골드" class="resource-icon">획득량 2배 : <img src="img/icon/Gold.webp" alt="골드" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade11"><img src="img/icon/Tree.webp" alt="아이템" class="resource-icon">목재 획득량 2배 :  <img src="img/icon/Tree.webp" alt="아이템" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade12"><img src="img/icon/Food.webp" alt="아이템" class="resource-icon">식량 획득량 2배 :  <img src="img/icon/Food.webp" alt="아이템" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade13"><img src="img/icon/Rock.webp" alt="아이템" class="resource-icon">석재 획득량 2배 :  <img src="img/icon/Rock.webp" alt="아이템" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade14"><img src="img/icon/Steel.webp" alt="아이템" class="resource-icon">강철 획득량 2배 :  <img src="img/icon/Steel.webp" alt="아이템" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade15"><img src="img/icon/Chip.webp" alt="아이템" class="resource-icon">반도체 획득량 2배 :  <img src="img/icon/Chip.webp" alt="아이템" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade16"><img src="img/icon/Oil.webp" alt="아이템" class="resource-icon">석유 획득량 2배 :  <img src="img/icon/Oil.webp" alt="아이템" class="resource-icon">10k</button>
+  <button class="upgbtn" id="Upgrade17"><img src="img/icon/Uranium.webp" alt="아이템" class="resource-icon">우라늄 배터리 획득량 2배 :  <img src="img/icon/Uranium.webp" alt="아이템" class="resource-icon">10k</button>
+  
+</div>
+<button id="optionBtn">⚙️</button>
+<div id="optionModal">
+  <div style="margin-top: 40px;">
+    <label for="CycleTime">사이클 시간 <span id="CycleValue">9</span>초</label><br/>
+    <input id="CycleTime" type="range" min="3000" max="9000" step="500" value="9000" style="width: 100%; margin-top: 10px;">
+  </div>
+  <div style="margin-top: 40px;">
+    <label for="TileSize">타일 크기 <span id="TileValue">50</span>px</label><br/>
+    <input id="TileSize" type="range" min="10" max="200" step="10" value="50" style="width: 100%; margin-top: 10px;">
+  </div>
+  <div style="margin-top: 40px;">
+    <label for="BarColor">진행도 색상 변경 </label>
+    <input type="color" id="BarColor" value="#00ff00" style="vertical-align: middle; margin-left: 10px;">
+  </div>
+  <div style="margin-top: 40px;">
+    <label for="RestPower">정화력 x<span id="RestValue">1</span></label><br/>
+    <input id="RestPower" type="range" min="1" max="10" step="1" value="1" style="width: 100%; margin-top: 10px;">
+  </div>
+  <br>
+  <input type="checkbox" id="CityClick" />모바일 전용 화면 전체 클릭</label>
+  <br>
+  <input type="checkbox" id="AutoSave" checked />자동 저장</label>
+  <br>
+  <input type="checkbox" id="MaxShow" checked />창고 최대치 보기</label>
+  <br><br>
+  <button class="Resets" onclick="loadGame(2)">🗑️초기화</button>
+</div>
+
+  <script src="css/script.js"></script>
+</body>
+</html>

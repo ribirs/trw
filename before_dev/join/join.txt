@@ -1,0 +1,250 @@
+ 1. 와이어프레임 기본 개념
+목적: 사용자가 계정을 등록하기 위한 입력 폼 제공
+
+형태: 모달형 중앙 폼, 백그라운드 어둡게 처리 (Focus 유지)
+
+호출 방식: '회원가입' 버튼 클릭 → 폼 오픈 (모달)
+
+종료 방식: X 아이콘 / 배경 클릭 / ESC 키
+
+ 2. 와이어프레임 요소별 구성
+위치	요소	설명
+상단 중앙	회원가입 버튼	메인 호출 버튼 (고정 위치, 항상 보임)
+모달(중앙 정렬)	회원가입 타이틀	<h1>계정 등록</h1>
+우측 상단	닫기 아이콘(X)	&times; 버튼으로 모달 종료
+입력 영역	폼 필드들	아래 필드들로 구성됨
+하단	회원가입 버튼	폼 제출 버튼
+
+3. 입력 필드 구성 순서 (Label + Input)
+필드 순서	필드명	타입	설명
+1	아이디	text	중복 체크 필요 (현재 랜덤으로 처리)
+2	성명	text	5자 제한
+3	비밀번호	password	최대 10자
+4	비밀번호 확인	password	일치 확인 필요
+5	전화번호	tel	기본값 포함
+6	이메일	email	기본값 포함
+7	주소	text	input[type="text"] 사용
+8	생년월일	date	기본값 포함
+
+4. 반응형 설계 요소
+Breakpoint	조정 내용
+> 768px	라벨과 입력창 수평 정렬, 넓은 입력창
+<= 768px	수직 정렬, 입력창 폭 100%
+<= 480px	폰트/버튼/여백 축소, 모바일 최적화
+
+5. 사용자 동선 및 동작 흐름
+css
+복사
+편집
+[회원가입 버튼 클릭]
+   ↓
+[모달 창 뜸 + 배경 어두워짐]
+   ↓
+[각 필드 입력]
+   ↓
+[비밀번호 확인 일치 검사]
+   ↓
+[회원가입 버튼 클릭 → insert.php 전송]
+   ↓
+[X 아이콘 or ESC or 배경 클릭 → 모달 닫힘]
+
+6. 와이어프레임 예시 스케치 (텍스트 기반)
+text
+복사
+편집
+ ┌──────────────────────────────┐
+ │          계정 등록           │
+ │                     [ × ]   │
+ │ ┌──────────────────────────┐│
+ │ │ 아이디:      [          ]│
+ │ │ 성명:        [          ]│
+ │ │ 비밀번호:    [          ]│
+ │ │ 확인:        [          ]│
+ │ │ 전화번호:    [          ]│
+ │ │ 이메일:      [          ]│
+ │ │ 주소:        [          ]│
+ │ │ 생년월일:    [   📅    ] │
+ │ └──────────────────────────┘│
+ │         [ 회원가입 ]         │
+ └──────────────────────────────┘
+
+ [배경 어두움]
+ [중앙에 뜨는 모달 형태]
+
+ 와이어프레임 툴 사용 추천 (선택 사항)
+시각적으로 표현하고 싶다면 아래 툴 사용을 추천합니다:
+
+Figma: 무료 와이어프레임 + 프로토타이핑
+
+Wireframe.cc: 간단한 웹 기반 와이어프레임
+
+Balsamiq: 손그림 스타일 와이어프레임
+
+Pen & Paper: 초안이라면 종이 스케치도 좋습니다
+
+
+
+
+1. 전체 구조: 프레임 설계
+구성 요소	Figma 요소	설명
+전체 화면	Frame	Desktop (1440) 또는 Mobile 프레임 선택
+어두운 배경	Rectangle (불투명도 50%)	모달 뒤 배경 (rgba(0,0,0,0.5))
+모달 창	Rectangle + Auto Layout	회원가입 입력 박스, 둥근 테두리와 패딩 포함
+닫기 아이콘	Text × 또는 Icon	우측 상단, 작은 텍스트 or 아이콘
+회원가입 버튼 (열기)	Button (Component)	메인 버튼, 화면 중앙에 위치
+
+2. 모달 내부 구조: Auto Layout 활용
+모달 폼을 만들 때 Figma의 Auto Layout 기능을 사용하면 정렬이 쉬워요.
+
+✳️ 모달 창 내부 구조 (Auto Layout: Vertical)
+scss
+복사
+편집
+[Header 텍스트]   ← <Text> 계정 등록
+[닫기 아이콘]     ← <Text> 또는 <Icon> ×
+
+[Form Group - 아이디]
+  [Label 텍스트 + Input 필드]
+[Form Group - 성명]
+  [Label 텍스트 + Input 필드]
+...
+[생년월일]
+  [Label + Date Picker]
+
+[회원가입 버튼]
+
+3. 각 필드별 구조
+각 필드는 **Auto Layout (Horizontal)**을 사용해 한 줄로 만듭니다.
+
+요소 이름	내용	Figma 설정
+Label (텍스트)	아이디, 성명 등	Text size 14~16px, 정렬 왼쪽
+Input 필드 (사각형)	직접 사각형으로 제작 후 이름 "Input"	Width: 250~300px, Height: 40px, Border radius: 6px, Fill: #fff
+버튼	"회원가입"	Auto Layout 버튼 컴포넌트 or Rectangle + Text, Color: #A5D608
+
+ 4. 반응형 고려 팁 (Figma Constraints)
+모달 창을 가운데 정렬: Constraints → Center
+
+입력 필드: Width = Fill container로 설정
+
+작은 화면에서는 라벨 위에, 인풋 아래 (수직 정렬) 되도록 Auto Layout → Vertical로 설정
+
+ 5. 빠르게 구성할 수 있는 구조 계층 예시 (Figma Layers 구조)
+plaintext
+복사
+편집
+Page
+└── Frame: Join Page (Desktop 1440)
+    ├── Button: 회원가입
+    ├── Overlay (Rectangle with 50% opacity)
+    └── Modal Frame (Auto Layout - Vertical)
+        ├── Header Group
+        │   ├── Text: 계정 등록
+        │   └── Close Icon (×)
+        ├── Form Group 1: 아이디
+        │   ├── Text: 아이디
+        │   └── Input Field
+        ├── Form Group 2: 성명
+        │   ├── Text: 성명
+        │   └── Input Field
+        ...
+        ├── Form Group N: 생년월일
+        └── Submit Button: 회원가입
+
+6. 빠르게 만드는 팁
+단축키 사용:
+
+T: 텍스트
+
+R: 사각형
+
+Shift + A: Auto Layout 적용
+
+Cmd/Ctrl + G: 그룹
+
+Components로 변환하면 재사용 가능
+
+실제 입력폼처럼 보이게 하려면 Stroke + Corner Radius + Inner Shadow 사용
+
+
+Figma 템플릿 구조 (와이어프레임용 코드 스타일 안내)
+plaintext
+복사
+편집
+📁 Page: SignUpModal_UI
+└── 📦 Frame: Desktop 1440 (1440 x 1024)
+    ├── 🟩 Button: 회원가입
+    │   ├── 🟦 Rectangle (W: 200, H: 60, Radius: 12, Fill: #2E8B57)
+    │   └── 🔤 Text: "회원가입" (Font: 20px, Bold, White)
+    │   ⤷ Auto Layout: Horizontal, Centered
+    │
+    ├── ⬛ Overlay (BG dim)
+    │   └── Rectangle (W: 1440, H: 1024, Fill: rgba(0,0,0,0.5))
+    │
+    └── 📦 Frame: Modal (W: 550, H: auto, Radius: 20, Fill: White)
+        ⤷ Auto Layout: Vertical, Padding: 32, Spacing: 16
+        ├── 📦 Header Row
+        │   ⤷ Auto Layout: Horizontal, Justify: Space Between
+        │   ├── 🔤 Text: "계정 등록" (Font: 24px, Bold)
+        │   └── ❌ Close Icon: "×" (Font: 28px, Right aligned)
+        │
+        ├── 📦 FormGroup: 아이디
+        │   ⤷ Auto Layout: Vertical
+        │   ├── 🔤 Label: "아이디" (Font: 14px)
+        │   └── 🟦 Input Field
+        │       └── Rectangle (W: 100%, H: 40, Radius: 6, Stroke: #ccc)
+        │
+        ├── 📦 FormGroup: 성명
+        │   └── [동일 구조]
+        │
+        ├── 📦 FormGroup: 비밀번호
+        │   └── [동일 구조]
+        │
+        ├── 📦 FormGroup: 비밀번호 확인
+        │   └── [동일 구조]
+        │
+        ├── 📦 FormGroup: 전화번호
+        │   └── [동일 구조]
+        │
+        ├── 📦 FormGroup: 이메일
+        │   └── [동일 구조]
+        │
+        ├── 📦 FormGroup: 주소
+        │   └── [동일 구조]
+        │
+        ├── 📦 FormGroup: 생년월일
+        │   └── 🟦 Input (type=date 스타일)
+        │
+        └── 🟩 Submit Button: 회원가입
+            ├── 🟦 Rectangle (W: 100%, H: 48, Radius: 8, Fill: #2E8B57)
+            └── 🔤 Text: "회원가입" (Font: 16px, Bold, White)
+            ⤷ Auto Layout: Centered
+
+ Figma에서 빠르게 구현하려면:
+1. "Desktop Frame" 만들기
+Frame Tool (F) → "Desktop (1440x1024)"
+
+2. 버튼 만들기
+R로 사각형, T로 텍스트
+
+Shift + A로 Auto Layout 감싸기
+
+Fill: 초록색, Radius: 12px
+
+3. 모달 만들기
+사각형 만들고 Shift + A → Auto Layout (Vertical)
+
+패딩 32, 간격 16
+
+내부에 텍스트, 입력 필드 넣기
+
+ 텍스트 스타일 가이드 (선택 사항)
+유형	크기(px)	폰트 스타일
+타이틀 (계정 등록)	24	Bold
+라벨	14	Regular
+입력 텍스트	16	Regular
+버튼 텍스트	16	Bold
+
+
+
+예: “Figma에서 직접 사용할 수 있는 링크 보내줘”
+또는 “텍스트 레이아웃 그대로 export해줘”

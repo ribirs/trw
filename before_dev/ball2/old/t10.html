@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공 게임</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #f0f0f0;
+      font-family: sans-serif;
+    }
+
+    #ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: crimson;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .flame {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, orange, red, transparent);
+      border-radius: 50%;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+      animation: flicker 0.4s ease-out forwards;
+    }
+
+    .green-ball {
+      position: absolute;
+      background-color: green;
+      border-radius: 50%;
+      z-index: 1;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    .orange-ball {
+      position: absolute;
+      background-color: orange;
+      border-radius: 50%;
+      z-index: 1;
+      animation: spin 3s linear infinite;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      100% { transform: scale(2) translateY(20px); opacity: 0; }
+    }
+
+    @keyframes levelUpFlash {
+      0%   { transform: scale(1); background-color: rgba(100,100,100,0.3); }
+      50%  { transform: scale(1.1); background-color: rgba(255,255,255,0.6); }
+      100% { transform: scale(1); background-color: rgba(100,100,100,0.3); }
+    }
+
+    #hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(100, 100, 100, 0.3);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      z-index: 10;
+    }
+
+    #level {
+      color: crimson;
+      font-weight: bold;
+    }
+
+    #exp-bar-container {
+      width: 120px;
+      height: 10px;
+      background-color: #333;
+      border-radius: 5px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    #exp-bar {
+      height: 100%;
+      background-color: limegreen;
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    #exp-percent {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    #buttons {
+      margin-top: 8px;
+    }
+
+    button {
+      font-size: 12px;
+      margin-right: 5px;
+      padding: 2px 6px;
+      cursor: pointer;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(2); }
+    }
+
+    @keyframes spin {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.1); }
+    }
+
+    .collision-effect {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid white;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: collisionFade 0.5s forwards;
+      z-index: 3;
+      width: 30px;
+      height: 30px;
+    }
+
+    @keyframes collisionFade {
+      0% { opacity: 0.8; transform: scale(1);}
+      100% { opacity: 0; transform: scale(2);}
+    }
+
+  </style>
+</head>
+<body>
+  <div id="ball"></div>
+
+  <div id="hud">
+    <div id="level">레벨: 1</div>
+    <div id="exp-bar-container">
+      <div id="exp-bar"></div>
+    </div>
+    <div id="exp-percent">0%</div>
+    <div id="buttons">
+      <button onclick="saveData()">Save</button>
+      <button onclick="document.getElementById('fileInput').click()">Load</button>
+      <input type="file" id="fileInput" accept=".json" />
+    </div>
+  </div>
+
+  <script>
+    const ball = document.getElementById("ball");
+    const levelEl = document.getElementById("level");
+    const expBar = document.getElementById("exp-bar");
+    const expPercentEl = document.getElementById("exp-percent");
+    const hud = document.getElementById("hud");
+    const fileInput = document.getElementById("fileInput");
+
+    const ballSize = 50;
+    const greenBalls = [];
+    const greenBallCount = 10;
+    const greenSize = ballSize / 2;
+
+    const orangeBalls = [];
+    const orangeBallCount = 5;
+    const orangeSize = greenSize / 2;
+
+
+    let x = 100, y = 100;
+    let vx = 0, vy = 0;
+    const baseAcceleration = 0.5;
+    const baseMaxSpeed = 10;
+    let acceleration = baseAcceleration;
+    let maxSpeed = baseMaxSpeed;
+    const friction = 0.95;
+    let boostMode = false;
+    let lastFlameTime = 0;
+    const flameInterval = 50;
+
+    const keys = {
+      ArrowUp: false, ArrowDown: false,
+      ArrowLeft: false, ArrowRight: false
+    };
+
+    // 레벨/경험치 상태
+    let level = 1;
+    let exp = 0;
+
+    // 키 입력 처리
+    document.addEventListener("keydown", (e) => {
+      if (e.key in keys) keys[e.key] = true;
+
+      if (e.code === "Space" && !e.repeat) {
+        boostMode = !boostMode;
+        acceleration = boostMode ? baseAcceleration * 2 : baseAcceleration;
+        maxSpeed = boostMode ? baseMaxSpeed * 2 : baseMaxSpeed;
+        ball.style.backgroundColor = boostMode ? "orange" : "crimson";
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key in keys) keys[e.key] = false;
+    });
+
+    
+
+    function createFlame(x, y) {
+      const flame = document.createElement("div");
+      flame.className = "flame";
+      flame.style.left = x + "px";
+      flame.style.top = y + "px";
+      document.body.appendChild(flame);
+      setTimeout(() => flame.remove(), 400);
+    }
+
+    function spawnGreenBall() {
+      const div = document.createElement("div");
+      div.className = "green-ball";
+      div.style.width = greenSize + "px";
+      div.style.height = greenSize + "px";
+      document.body.appendChild(div);
+
+      return {
+        el: div,
+        x: Math.random() * (window.innerWidth - greenSize),
+        y: Math.random() * (window.innerHeight - greenSize),
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 4
+      };
+    }
+
+    function spawnOrangeBall() {
+      const div = document.createElement("div");
+      div.className = "orange-ball";
+      div.style.width = orangeSize + "px";
+      div.style.height = orangeSize + "px";
+      div.style.position = "absolute";
+      div.style.borderRadius = "50%";
+      div.style.zIndex = "1";
+      document.body.appendChild(div);
+
+      const interval = 3000 + Math.random() * 4000;
+
+      return {
+        el: div,
+        x: Math.random() * (window.innerWidth - orangeSize),
+        y: Math.random() * (window.innerHeight - orangeSize),
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 4,
+        changeInterval: interval,
+        changeDirectionTimer: Math.random() * interval  // 여기 랜덤 초기값으로 변경
+      };
+    }
+
+
+    function respawnGreenBall(gb) {
+      gb.x = Math.random() * (window.innerWidth - greenSize);
+      gb.y = Math.random() * (window.innerHeight - greenSize);
+      gb.vx = (Math.random() - 0.5) * 4;
+      gb.vy = (Math.random() - 0.5) * 4;
+    }
+    function respawnOrangeBall(ob) {
+      ob.x = Math.random() * (window.innerWidth - orangeSize);
+      ob.y = Math.random() * (window.innerHeight - orangeSize);
+      ob.vx = (Math.random() - 0.5) * 4;
+      ob.vy = (Math.random() - 0.5) * 4;
+    }
+
+    function checkCollision(ax, ay, asize, bx, by, bsize) {
+      const dx = ax + asize / 2 - (bx + bsize / 2);
+      const dy = ay + asize / 2 - (by + bsize / 2);
+      return Math.hypot(dx, dy) < (asize + bsize) / 2;
+    }
+
+    function updateHUD() {
+      levelEl.textContent = `레벨: ${level}`;
+      const required = level * 10;
+      const percent = Math.floor((exp / required) * 100);
+      expBar.style.width = percent + "%";
+      expPercentEl.style.color = "#555";  // 짙은 회색으로 변경
+      expPercentEl.textContent = `${percent}% (${exp}/${level * 10})`;
+    }
+
+    function animateLevelUp() {
+      hud.style.animation = "levelUpFlash 0.6s ease";
+      setTimeout(() => {
+        hud.style.animation = "";
+      }, 600);
+    }
+
+    function createCollisionEffect(cx, cy) {
+      const effect = document.createElement("div");
+      effect.className = "collision-effect";
+      effect.style.left = (cx - 15) + "px";
+      effect.style.top = (cy - 15) + "px";
+      document.body.appendChild(effect);
+      setTimeout(() => effect.remove(), 500);
+    }
+
+    for (let i = 0; i < greenBallCount; i++) {
+      greenBalls.push(spawnGreenBall());
+    }
+    for (let i = 0; i < orangeBallCount; i++) {
+      orangeBalls.push(spawnOrangeBall());
+    }
+
+    let lastTimestamp = 0;
+
+    function update(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const deltaTime = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      if (keys.ArrowUp) vy -= acceleration;
+      if (keys.ArrowDown) vy += acceleration;
+      if (keys.ArrowLeft) vx -= acceleration;
+      if (keys.ArrowRight) vx += acceleration;
+
+      vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
+      vy = Math.max(-maxSpeed, Math.min(maxSpeed, vy));
+
+      x += vx;
+      y += vy;
+
+      if (x + ballSize < 0) x = screenWidth;
+      else if (x > screenWidth) x = -ballSize;
+      if (y + ballSize < 0) y = screenHeight;
+      else if (y > screenHeight) y = -ballSize;
+
+      vx *= friction;
+      vy *= friction;
+
+      ball.style.left = x + "px";
+      ball.style.top = y + "px";
+
+      if (boostMode && timestamp - lastFlameTime > flameInterval) {
+        lastFlameTime = timestamp;
+        createFlame(x + ballSize / 2 - 10, y + ballSize / 2);
+      }
+
+      for (const gb of greenBalls) {
+        gb.x += gb.vx * 0.4;
+        gb.y += gb.vy * 0.4;
+
+        if (gb.x + greenSize < 0) gb.x = screenWidth;
+        else if (gb.x > screenWidth) gb.x = -greenSize;
+        if (gb.y + greenSize < 0) gb.y = screenHeight;
+        else if (gb.y > screenHeight) gb.y = -greenSize;
+
+        gb.el.style.left = gb.x + "px";
+        gb.el.style.top = gb.y + "px";
+
+        // 초록공 충돌 감지 후
+        if (checkCollision(x, y, ballSize, gb.x, gb.y, greenSize)) {
+          createCollisionEffect(gb.x + greenSize / 2, gb.y + greenSize / 2);
+          respawnGreenBall(gb);
+          exp += 1;
+          if (exp >= level * 10) {
+            level += 1;
+            exp = 0;
+            animateLevelUp();
+          }
+          updateHUD();
+        }
+      }
+
+      for (const ob of orangeBalls) {
+        // 방향 변경 타이머 증가
+        ob.changeDirectionTimer += deltaTime;
+
+        if (ob.changeDirectionTimer > ob.changeInterval) {
+          ob.vx = (Math.random() - 0.5) * 4;
+          ob.vy = (Math.random() - 0.5) * 4;
+          ob.changeDirectionTimer = 0;
+          ob.changeInterval = 3000 + Math.random() * 4000;
+        }
+
+        ob.x += ob.vx * 1.6;  // 주황공 속도
+        ob.y += ob.vy * 1.6;
+
+        // 화면 밖 순환 처리
+        if (ob.x + orangeSize < 0) ob.x = screenWidth;
+        else if (ob.x > screenWidth) ob.x = -orangeSize;
+        if (ob.y + orangeSize < 0) ob.y = screenHeight;
+        else if (ob.y > screenHeight) ob.y = -orangeSize;
+
+        ob.el.style.left = ob.x + "px";
+        ob.el.style.top = ob.y + "px";
+
+        if (checkCollision(x, y, ballSize, ob.x, ob.y, orangeSize)) {
+          createCollisionEffect(ob.x + orangeSize / 2, ob.y + orangeSize / 2);
+          respawnOrangeBall(ob);
+          exp += 5;
+          if (exp >= level * 10) {
+            level += 1;
+            exp = 0;
+            animateLevelUp();
+          }
+          updateHUD();
+        }
+      }
+
+
+      
+
+      requestAnimationFrame(update);
+    }
+
+    updateHUD();
+    requestAnimationFrame(update);
+
+    // ✅ 저장
+    function saveData() {
+      const data = {
+        level,
+        exp
+      };
+      const now = new Date();
+      const pad = n => n.toString().padStart(2, '0');
+      const filename = `ball_save_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}.json`;
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+    }
+
+    // ✅ 불러오기
+    fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.level && typeof data.exp === "number") {
+            level = data.level;
+            exp = data.exp;
+            updateHUD();
+          } else {
+            alert("잘못된 세이브 파일입니다.");
+          }
+        } catch {
+          alert("파일을 읽을 수 없습니다.");
+        }
+      };
+      reader.readAsText(file);
+    });
+  </script>
+</body>
+</html>

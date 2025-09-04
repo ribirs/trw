@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Simple RPG</title>
+    <link rel="stylesheet" href="css/css.css">
+<style>
+</style>
+</head>
+<body>
+
+<!-- 메뉴 바 -->
+<div id="menu-bar">
+  <button class="menu-button" id="menu-stat" onclick="showPanel('stat')">🧍 스탯창</button>
+  <button class="menu-button" id="menu-dungeon" onclick="showPanel('equip')">⚔️ 장비</button>
+  <button class="menu-button" id="menu-town" onclick="showPanel('town')">🏘️ 마을</button>
+  <button class="menu-button" id="menu-dungeon" onclick="showPanel('job')">⚒️ 직업</button>
+  <button class="menu-button" id="menu-dungeon" onclick="showPanel('skill')">✨ 스킬</button>
+  <button class="menu-button" id="menu-dungeon" onclick="showPanel('dungeon')">🏰 던전</button>
+  <button class="menu-button" id="reset-game-btn">🔁 리셋</button>
+</div>
+
+<!-- 메인 UI -->
+<div id="main-container">
+  <!-- 왼쪽 스탯창 -->
+  <div id="stat-window" class="content-panel visible">
+    <div id="base-stats">
+      <hr />
+      <div id="JobName"></div>
+      <hr />
+      <span id="statPoint">5</span>
+      <hr />
+      <div id="custom-stats"></div>
+    </div>
+
+    <div id="detailed-stats" class="hidden">
+      <div class="stat-item">물리 데미지: <span id="physicalDamage">0</span></div>
+      <div class="stat-item">마법 데미지: <span id="magicDamage">0</span></div>
+      <div class="stat-item">명중률: <span id="accuracy">0%</span></div>
+      <div class="stat-item">회피율: <span id="evasion">0%</span></div>
+      <div class="stat-item">물리 크리티컬 확률: <span id="critRate">0%</span></div>
+      <div class="stat-item">마법 크리티컬 확률: <span id="magicCritRate">0%</span></div>
+      <div class="stat-item">물리 크리티컬 데미지: <span id="critDamage">0%</span></div>
+      <div class="stat-item">마법 크리티컬 데미지: <span id="magicCritDamage">0%</span></div>
+    </div>
+
+    <button id="toggle-details">상세 스탯 보기</button>
+  </div>
+
+  <!-- 장비 화면 -->
+  <div id="equip-panel" class="content-panel">
+    <div class="equip-item">무기🗡️ 데미지 0 증가</div>
+    <div class="equip-item">모자👒 명중률 0% 증가</div>
+    <div class="equip-item">의복👘 방어력 0 증가</div>
+    <div class="equip-item">신발👢 회피율 0% 증가</div>
+    <div class="equip-item">방패🛡️ 방어력 0 증가</div>
+  </div>
+
+  <!-- 마을 화면 -->
+  <div id="town-panel" class="content-panel">
+    <button class="town-button" onclick="openItemShop()">HP포션(+10) 구매 (20G) <br> <span id="potion-count2"></span>개 보유</button>
+    <button class="town-button" id="inn" onclick="useInn()">여관</button>
+  </div>
+
+  <!-- 직업 화면 -->
+  <div id="job-panel" class="content-panel">
+    <p>레벨 10 전직</p>
+    <div class="job-item" id="job11"><button id="jb11">?</button> 🪓버서커</div>
+    <div class="job-item" id="job12"><button id="jb12">?</button> 🗡️로그</div>
+    <div class="job-item" id="job13"><button id="jb13">?</button> 🛡️나이트</div>
+  </div>
+
+  <!-- 스킬 화면 -->
+  <div id="skill-panel" class="content-panel">
+    <hr />
+    <span id="skillPoint"></span>
+    <hr />
+    <div id="custom-stats"></div>
+  </div>
+
+  <!-- 던전 화면 -->
+  <div id="dungeon-panel" class="content-panel">
+    <span id="DungeonLv">던전 레벨 1</span>
+    <button class="dungeon-button" onclick="DungeonDown()">던전 Lv ↓</button>
+    <button class="dungeon-button" onclick="DungeonUp()">던전 Lv ↑</button>
+    <div id="dungeon-battle">
+
+      <div><strong>Enemy</strong> Dmg: <span id="monster-atk"></span></div>
+      <div class="bar-container"><span id="monster-hp-text">20</span><div id="monster-hp-bar" class="hp-bar"></div></div>
+      <div class="info-line"></div>
+
+      <hr />
+
+      <div><strong>My</strong> Dmg: <span id="player-atk"></span></div>
+
+      <div id="battle-buttons">
+        <button id="attack-btn">공격</button>
+        <button id="potion-btn">HP포션(+10) <br><span id="potion-count"></span>개 남음</button>
+        <button id="heal-btn">힐(HP+5) <br>MP 1 소모</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bar-container"><span id="lv">1</span><div id="player-lv-bar" class="lv-bar"></div></div>
+<div class="bar-container"><span id="exp">0</span><div id="player-xp-bar" class="exp-bar"></div></div>
+<div class="bar-container"><span id="hp">20</span><div id="player-hp-bar" class="hp-bar"></div></div>
+<div class="bar-container"><span id="mp">5</span><div id="player-mp-bar" class="mp-bar barcolor"></div></div>
+<div id="gold-display">Gold: <span id="gold">100</span> G</div>
+<!-- 로그창 -->
+<div id="log-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

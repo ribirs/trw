@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>부동산 게임 v0.4</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="top-bar">
+    <div id="header">
+      <div id="status">
+        <span id="date"></span>
+        <span id="money"></span>
+        <button id="options-button">⚙️</button>
+        <button id="save-button">💾</button>
+        <button id="load-button">📂</button>
+        <!-- <button id="reset-button">🔄</button> -->
+      </div>
+    </div>
+  </div>
+  <!-- 옵션 창 -->
+  <div id="options-panel" style="display: none;">
+    <h3>게임 옵션</h3>
+    <label for="speed-range">게임 속도 조절 = <span id="speed-value">2</span></label>
+    <input type="range" min="1" max="5" value="2" id="speed-range" />
+    <div style="margin-top: 15px; display:none;">
+      <label><input type="checkbox" id="auto-buy"> 자동 구매</label>
+    </div>
+  
+    <div style="margin-top: 10px; display:none;">
+      <label><input type="checkbox" id="auto-sell"> 자동 판매</label>
+    </div>
+    <div style="margin-top: 10px;">
+      <label><input type="checkbox" id="optionSatan" checked> Demon</label>
+    </div>
+    <div style="margin-top: 10px;">
+      <label><input type="checkbox" id="optionToggle" checked> 지난 달 대비 비율</label>
+    </div>
+  </div>
+  <div id="game">
+    <div id="properties-container"></div>
+  </div>
+  <div id="price-change-message"></div>
+  <div id="log-panel"></div>
+  <script src="script.js"></script>
+</body>
+</html>

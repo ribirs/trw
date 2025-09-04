@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>숫자를 찾아라</title>
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/js26.css">
+</head>
+<body>
+    <div id="wrapper">
+        <div style="color:orange;">시도 횟수가 너무 길어져서<br>화면 밖으로 나가게 되면<br>자동 실패입니다.</div>
+        <br>
+        <h1 style="color:red;">숫자를 찾아라</h1>
+        <div id="range" class="footer"></div>
+        <form action="" onsubmit="return false;">
+            <label><input type="text" id="try" autocomplete="off" autofocus></label>
+            <input type="button" value="확인" id="check" class="btn btn-1" onclick="finding()">
+            <input type="button" value="Re:" id="reset" class="btn btn-2" onclick="window.location.reload()">
+        </form>
+        <div id="display" class="output"></div>
+        <div id="counter" class="footer"></div>
+
+    </div>
+  
+<script>
+    let cnt = 0;
+    let history = [];
+    let min = 1.00;
+    let max = 1000.00;
+    const rand = +(Math.random() * 999 + 1).toFixed(2);
+    
+    document.addEventListener("keydown",function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault(); // 기본 동작 막기 (폼 제출 등)
+            return false; // 불필요한 동작도 방지
+        }
+    })
+    document.getElementById("range").innerHTML = `<strong>${min} ~ ${max}</strong>`;
+    function finding() {
+        cnt++;
+        const inputStr = document.getElementById("try").value;
+        const display = document.getElementById("display");
+        const counter = document.getElementById("counter");
+        const rangeDisplay = document.getElementById("range");
+
+        // 입력 숫자 변환 및 고정 소수점 2자리
+        const useNum = Number(parseFloat(inputStr).toFixed(2));
+
+        // 범위 내 숫자 체크
+        if (!isNaN(useNum) && useNum >= min && useNum <= max) {
+            let resultText = "";
+
+            if (rand > useNum) {
+                display.innerHTML = "UP";
+                min = +(useNum + 0.01).toFixed(2); // 범위 좁히기
+                resultText = `${useNum.toFixed(2)} → UP`;
+            } else if (rand < useNum) {
+                display.innerHTML = "DOWN";
+                max = +(useNum - 0.01).toFixed(2); // 범위 좁히기
+                resultText = `${useNum.toFixed(2)} → DOWN`;
+            } else {
+                display.innerHTML = `<span style='color:red'>정답</span>`;
+                resultText = `${useNum.toFixed(2)} → 정답`;
+            }
+
+            // 시도 기록 누적 출력
+            counter.innerHTML += `시도 ${cnt}: ${resultText}<br>`;
+
+            // 현재 입력 가능한 범위 출력
+            rangeDisplay.innerHTML = `<strong>${min.toFixed(2)} ~ ${max.toFixed(2)}</strong>`;
+
+        } else {
+            display.innerHTML = `범위 내 숫자만<br>입력하세요!<br>(${min.toFixed(2)} ~ ${max.toFixed(2)})`;
+        }
+        
+        const inputElement = document.getElementById("try");
+        inputElement.value = '';
+        inputElement.focus();  // 커서 다시 포커스
+    }
+
+
+</script>
+</body>
+</html>

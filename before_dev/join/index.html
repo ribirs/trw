@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>회원가입</title>
+    <link rel="icon" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/join.css">
+</head>
+<body>
+    <button id="openbox">회원가입</button>
+  <div id="overlay"></div>
+  <div id="join_mem" role="dialog" aria-modal="true" aria-labelledby="joinTitle" tabindex="-1">
+    <span class="close-icon" title="닫기">&times;</span>
+    <h1 id="joinTitle">계정 등록</h1>
+    <form class="cf" name="member_form" method="post" action="insert.php" id="myForm">
+      <label><span>아이디 :</span>
+        <input type="text" name="id" id="id" pattern="^[a-z0-9]{4,12}$" minlength="4" maxlength="12" title="4~12자의 영문 소문자 및 숫자만 입력하세요." required>
+      </label>
+      <label><span>성명 :</span><input type="text" maxlength="5" name="name" id="name" value="홍길동" required>
+      </label>
+      <label><span>비밀번호 :</span><input type="password" maxlength="10" name="pass" id="pass" required>
+      </label>
+      <label><span>비밀번호 확인 :</span><input type="password" maxlength="10" name="pass_confirm" id="pass_confirm" required>
+      </label>
+      <label><span>전화번호 :</span><input type="tel" maxlength="13" value="010-1234-1234" name="tel" id="ph">
+      </label>
+      <label><span>이메일 :</span><input type="email" name="email" value="ribir@naver.com" id="email">
+      </label>
+      <label><span>주소 :</span><input type="text" name="address" value="서울시 어딘가" id="address">
+      </label>
+      <label><span>생년월일 :</span><input type="date" name="birth" value="1993-12-11" id="birth">
+      </label>
+      <div id="button"><input type="submit" value="회원가입" class="btn"></div>
+    </form>
+  </div>
+    <script src="css/script.js"></script>
+</body>
+</html>

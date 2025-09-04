@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>불꽃 부스트 공</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+
+    #ball {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      width: 50px;
+      height: 50px;
+      background-color: crimson;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .flame {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, orange, red, transparent);
+      border-radius: 50%;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+      animation: flicker 0.4s ease-out forwards;
+    }
+
+    @keyframes flicker {
+      0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2) translateY(20px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="ball"></div>
+
+  <script>
+    const ball = document.getElementById("ball");
+    const ballSize = 50;
+
+    let x = 100;
+    let y = 100;
+
+    let vx = 0;
+    let vy = 0;
+
+    const baseAcceleration = 0.5;
+    const baseMaxSpeed = 10;
+    let acceleration = baseAcceleration;
+    let maxSpeed = baseMaxSpeed;
+    const friction = 0.95;
+
+    let boostMode = false;
+    let lastFlameTime = 0;
+    const flameInterval = 50; // ms
+
+    const keys = {
+      ArrowUp: false,
+      ArrowDown: false,
+      ArrowLeft: false,
+      ArrowRight: false
+    };
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key in keys) keys[e.key] = true;
+
+      // 스페이스바: 부스트 모드 ON/OFF
+      if (e.code === "Space" && !e.repeat) {
+        boostMode = !boostMode;
+
+        if (boostMode) {
+          acceleration = baseAcceleration * 2;
+          maxSpeed = baseMaxSpeed * 2;
+          ball.style.backgroundColor = "orange";
+        } else {
+          acceleration = baseAcceleration;
+          maxSpeed = baseMaxSpeed;
+          ball.style.backgroundColor = "crimson";
+        }
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key in keys) keys[e.key] = false;
+    });
+
+    function createFlame(x, y) {
+      const flame = document.createElement("div");
+      flame.className = "flame";
+      flame.style.left = x + "px";
+      flame.style.top = y + "px";
+      document.body.appendChild(flame);
+
+      // 일정 시간 뒤 제거
+      setTimeout(() => {
+        flame.remove();
+      }, 400);
+    }
+
+    function update(timestamp) {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      // 가속도 적용
+      if (keys.ArrowUp) vy -= acceleration;
+      if (keys.ArrowDown) vy += acceleration;
+      if (keys.ArrowLeft) vx -= acceleration;
+      if (keys.ArrowRight) vx += acceleration;
+
+      // 속도 제한
+      vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
+      vy = Math.max(-maxSpeed, Math.min(maxSpeed, vy));
+
+      // 위치 이동
+      x += vx;
+      y += vy;
+
+      // 포털 이동
+      if (x + ballSize < 0) x = screenWidth;
+      else if (x > screenWidth) x = -ballSize;
+
+      if (y + ballSize < 0) y = screenHeight;
+      else if (y > screenHeight) y = -ballSize;
+
+      // 관성
+      vx *= friction;
+      vy *= friction;
+
+      // 위치 적용
+      ball.style.left = x + "px";
+      ball.style.top = y + "px";
+
+      // 🔥 부스트일 때 불꽃 생성
+      if (boostMode && timestamp - lastFlameTime > flameInterval) {
+        lastFlameTime = timestamp;
+        createFlame(x + ballSize / 2 - 10, y + ballSize / 2);
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
+  </script>
+</body>
+</html>

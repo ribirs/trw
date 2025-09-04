@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>무협 육성 시뮬레이션</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Serif+KR&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <div class="background-image"></div>
+  <!-- 좌측 스텟 패널 -->
+  <div id="statsPanel" class="side-panel close-left">
+    <div class="stats-container">
+      <!-- 기본 스탯 박스 -->
+        <div id="custom-date-display"></div>
+        <p>🩸<span id="health">100</span>
+          <div class="stat-bar-container">
+            <div id="healthBar" class="stat-bar health-bar"></div>
+          </div></p>
+        <p>💙<span id="energy">50</span>
+          <div class="stat-bar-container">
+            <div id="energyBar" class="stat-bar energy-bar"></div>
+          </div></p>
+        <p>🏅<span id="fame">0</span></p>
+        <p>🧬<span id="blood">0</span></p>
+        <p>🧘<span id="realm">입문자</span></p>
+        <p>🏯<span id="sect">소속 문파 없음</span></p>
+        <p>⏳<span id="age">0</span></p>
+        <p>💰<span id="Gold">0</span></p>
+
+      <!-- 상세 스탯 박스 -->
+      <div class="stats detailed-stats">
+        <div class="stat-item">
+          <p><strong>능력</strong>: <span id="All"></span></p>
+        </div>
+        <hr>
+        <div class="stat-item">
+          <p><strong>근력</strong>: <span id="STR"></span></p>
+        </div>
+        <div class="stat-item">
+          <p><strong>신법</strong>: <span id="AGI"></span></p>
+        </div>
+        <div class="stat-item">
+          <p><strong>내력</strong>: <span id="CHI"></span></p>
+        </div>
+        <div class="stat-item">
+          <p><strong>기감</strong>: <span id="SEN"></span></p>
+        </div>
+        <hr>
+        <div class="stat-item">
+          <p><strong>심지</strong>: <span id="WIL"></span></p>
+        </div>
+        <div class="stat-item">
+          <p><strong>오성</strong>: <span id="ITG"></span></p>
+        </div>
+        <div class="stat-item">
+          <p><strong>외공</strong>: <span id="DEF"></span></p>
+        </div>
+        <div class="stat-item">
+          <p><strong>경맥</strong>: <span id="VIT"></span></p>
+        </div>
+        <p>물리 공격력: <span id="physAtk"></span></p>
+        <p>체력 회복: <span id="defVal"></span></p>
+        <p>내공 회복: <span id="vitVal"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 우측 행동 패널 -->
+  <div id="actionsPanel" class="side-panel close-right">
+    <div id="actionList"></div>
+  </div>
+  
+  <!-- 팝업 -->
+  <div id="inventoryPopup" class="popup2 hidden">
+    <div class="popup-content" id="inventoryContainer">
+      <!-- 아이템 JS로 렌더링 -->
+    </div>
+  </div>
+  
+  <div id="inventoryPopup3" class="popup3 hidden">
+    <div class="popup-content3" id="inventoryContainer3">
+      <!-- 아이템 JS로 렌더링 -->
+    </div>
+  </div>
+
+  <!-- 상단 가운데 고정 버튼들 -->
+  <div id="topButtons" style="display:none;">
+    <button id="ballBtn">💼</button>
+    <button id="statsBtn">📊</button>
+    <button id="actionBtn">🏃</button>
+    <button id="GuideBtn">📘</button>
+  </div>
+
+  <!-- 메시지 로그 -->
+  <div id="log" class="log">
+    <div id="log-container"></div>
+  </div>
+
+  <div id="lineage-selection" style="display:none;">
+    <h3>그대의 혈통은 무엇인가.</h3>
+    <div id="lineage-options"></div>
+    <h5>택한 혈통에 따라 기예와 내력이 상이하오.</h5>
+  </div>
+  
+
+  <script src="script.js"></script>
+</body>
+</html>

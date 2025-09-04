@@ -1,0 +1,46 @@
+
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+#game {
+  display: grid;
+  grid-template-columns: repeat(6, 50px);
+  gap: 3px;
+  margin-top: 20px;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #5d5d5d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  user-select: none;
+}
+
+.filled {
+  border-color: #fff;
+}
+
+.active {
+  border-color: yellow;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { background-color: yellow; }
+  25%, 75% { background-color: transparent; }
+}
+
+.blink {
+  animation: blink 0.4s ease-in-out 2; /* 0.4초 * 2번 반복 */
+}

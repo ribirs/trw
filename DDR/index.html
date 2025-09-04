@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>DDR</title>
+  <link rel="stylesheet" href="css.css" />
+</head>
+<body>
+  <div id="trw"><a href="http://ribir.dothome.co.kr/trw">🏘️</a></div>
+  <!-- <div id="stage">Stage: 1</div> -->
+  <div id="time">Time: 00분 00.00초</div>
+  <!-- <div id="combo">Combo: 0</div> -->
+  <div id="game">
+    <div id="hit-zone">
+      <div id="hit-line"></div>
+      <div id="arw1" class="arrow arw">←</div>
+      <div id="arw2" class="arrow arw">↑</div>
+      <div id="arw3" class="arrow arw">↓</div>
+      <div id="arw4" class="arrow arw">→</div>
+    </div>
+    <div id="judgment"></div>
+    <div id="score">Score: 0</div>
+
+  </div>
+  <div id="controls">
+    <button class="btns" id="startBtn">게임 시작</button>
+    <button class="btns" id="pauseBtn" style="display:none;">⏸ 일시정지</button>
+    <button class="btns" id="resumeBtn" style="display:none;">▶ 이어서</button>
+  </div>
+  
+  <div id="gameOver">
+    게임 오버<br><button class="btns" id="restartBtn">다시 시작</button>
+  </div>
+  
+
+  <div class="mobile-controls">
+    <button onclick="handleInput('←')">←</button>
+    <button onclick="handleInput('↑')">↑</button>
+    <button onclick="handleInput('↓')">↓</button>
+    <button onclick="handleInput('→')">→</button>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>

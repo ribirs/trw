@@ -1,0 +1,210 @@
+/* 어두운 배경 레이어 */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: none; /* 기본 숨김 */
+  z-index: 900;
+}
+
+/* 회원가입 버튼 스타일 */
+#openbox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #27be64;
+  border-radius: 30px;
+  padding: 15px 40px;
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  border: none;
+  transition: background-color 0.3s ease;
+  z-index: 1001;
+}
+
+#openbox:hover {
+  background-color: #1f954f;
+}
+
+/* 회원가입 폼 모달 */
+#join_mem {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 550px;  /* 기존보다 약간 키움 */
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: rgba(39, 122, 100, 0.95);
+  border-radius: 30px;
+  padding: 30px 40px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  display: none; /* 기본 숨김 */
+  z-index: 1002;
+  color: white;
+}
+
+/* 모달 내부 타이틀 */
+#join_mem h1 {
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #e0f8d8;
+}
+
+/* 닫기 버튼 대신 우측 상단 작은 아이콘 (X) 추가 */
+#join_mem .close-icon {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #d3f9b3;
+  transition: color 0.3s ease;
+}
+
+#join_mem .close-icon:hover {
+  color: #a6d608;
+}
+
+/* 폼 스타일은 기존과 비슷하게 유지하되 글자와 입력창 한 줄 배치 */
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+label > span {
+  flex: 0 0 140px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #dff0d8;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="email"],
+input[type="date"],
+input[type="address"] {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  background: #f9f9f9;
+  color: #333;
+  transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="address"]:focus {
+  outline: none;
+  box-shadow: 0 0 8px #27be64;
+}
+
+/* 회원가입 제출 버튼 */
+#button {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+#button input[type="submit"] {
+  background: #a5d608;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 60px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #334d00;
+  box-shadow: 0 4px 10px rgba(165, 214, 8, 0.7);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#button input[type="submit"]:hover {
+  background-color: #7a9c00;
+  color: #e0f8d8;
+}
+
+/* 기존 스타일 유지 */
+
+/* --- 반응형 시작 --- */
+@media (max-width: 768px) {
+  #join_mem {
+    width: 90%;
+    max-height: 80vh;
+    padding: 20px 20px;
+  }
+
+  /* 라벨 - 작은 화면에선 세로 정렬 */
+  label {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  label > span {
+    flex: none;
+    width: 100%;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="date"],
+  input[type="address"] {
+    width: 100%;
+    flex-grow: 0;
+  }
+
+  /* 회원가입 버튼 크기 축소 */
+  #openbox {
+    font-size: 1.4rem;
+    padding: 12px 30px;
+  }
+
+  /* 제출 버튼도 축소 */
+  #button input[type="submit"] {
+    padding: 12px 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #join_mem {
+    padding: 15px 15px;
+    max-height: 75vh;
+  }
+
+  label > span {
+    font-size: 0.8rem;
+  }
+
+  #openbox {
+    font-size: 1.2rem;
+    padding: 10px 25px;
+  }
+
+  #button input[type="submit"] {
+    padding: 10px 35px;
+    font-size: 1rem;
+  }
+}
